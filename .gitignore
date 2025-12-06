@@ -1,0 +1,10 @@
+node_modules
+.cache
+public
+dist
+netlify.toml
+.DS_Store
+.env*
+
+# Local Netlify folder
+.netlify
