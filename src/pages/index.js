@@ -105,34 +105,53 @@ function ParticleField({ className = '' }) {
     const ctx = canvas.getContext('2d')
     let raf
     const particles = []
-    const max = 90
+    let lastTs = performance.now()
+    let cfg = computeConfig()
+    let resizeTimer
+
+    function computeConfig() {
+      const mobile = window.innerWidth <= 768
+      return {
+        max: mobile ? 28 : 90,
+        speed: mobile ? 0.24 : 0.55,
+        connect: mobile ? 110 : 140,
+        margin: mobile ? 18 : 24,
+        radiusBase: mobile ? 1.2 : 1.6,
+        radiusJitter: mobile ? 0.6 : 0.8,
+      }
+    }
 
     function resize() {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
+      cfg = computeConfig()
+      spawn()
     }
 
     function spawn() {
       particles.length = 0
-      for (let i = 0; i < max; i++) {
+      for (let i = 0; i < cfg.max; i++) {
         const angle = Math.random() * Math.PI * 2
-        const speed = 0.55
+        const speed = cfg.speed
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          r: 1.6 + Math.random() * 0.8,
+          r: cfg.radiusBase + Math.random() * cfg.radiusJitter,
         })
       }
     }
 
-    function step() {
+    function step(ts) {
+      const delta = (ts - lastTs) / 16.67
+      const dt = Math.min(Math.max(delta || 1, 0.5), 1.3)
+      lastTs = ts || performance.now()
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       for (const p of particles) {
-        p.x += p.vx
-        p.y += p.vy
-        const margin = 24
+        p.x += p.vx * dt
+        p.y += p.vy * dt
+        const margin = cfg.margin
         if (p.x < -margin) p.x = canvas.width + margin
         if (p.x > canvas.width + margin) p.x = -margin
         if (p.y < -margin) p.y = canvas.height + margin
@@ -155,8 +174,8 @@ function ParticleField({ className = '' }) {
           const dx = a.x - b.x
           const dy = a.y - b.y
           const dist = Math.hypot(dx, dy)
-          if (dist < 140) {
-            ctx.globalAlpha = 1 - dist / 140
+          if (dist < cfg.connect) {
+            ctx.globalAlpha = 1 - dist / cfg.connect
             ctx.beginPath()
             ctx.moveTo(a.x, a.y)
             ctx.lineTo(b.x, b.y)
@@ -169,12 +188,23 @@ function ParticleField({ className = '' }) {
     }
 
     resize()
-    spawn()
-    step()
-    window.addEventListener('resize', resize)
+    raf = requestAnimationFrame(step)
+    const handleResize = () => {
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(resize, 120)
+    }
+    window.addEventListener('resize', handleResize)
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        lastTs = performance.now()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
     return () => {
       cancelAnimationFrame(raf)
-      window.removeEventListener('resize', resize)
+      window.removeEventListener('resize', handleResize)
+      document.removeEventListener('visibilitychange', handleVisibility)
+      clearTimeout(resizeTimer)
     }
   }, [])
 
