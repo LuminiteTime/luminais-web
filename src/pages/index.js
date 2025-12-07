@@ -144,9 +144,12 @@ function ParticleField({ className = '' }) {
     }
 
     function step(ts) {
-      const delta = (ts - lastTs) / 16.67
-      const dt = Math.min(Math.max(delta || 1, 0.5), 1.3)
-      lastTs = ts || performance.now()
+      const now = ts || performance.now()
+      const deltaMs = now - lastTs
+      const resumed = deltaMs > 120
+      const delta = resumed ? 1 : Math.max(deltaMs, 0) / 16.67
+      const dt = Math.min(Math.max(delta || 1, 0.6), resumed ? 1 : 1.15)
+      lastTs = now
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       for (const p of particles) {
         p.x += p.vx * dt
