@@ -318,7 +318,7 @@ function StickyHeader({ lang, toggleLang }) {
 
   return (
     <header className={`topbar ${scrolled ? 'scrolled' : ''}`}>
-      <div className="brand">Mikhail Trifonov</div>
+      <div className="brand">{t.heroName}</div>
       <nav className="nav">
         <a href="#home">{t.nav.home}</a>
         <a href="#experience">{t.nav.exp}</a>
@@ -444,6 +444,7 @@ export default IndexPage
 export const Head = () => (
   <>
     <title>Mikhail Trifonov — Java Backend</title>
+    <link rel="icon" href="/images/main_me.jpg" type="image/jpeg" />
     <meta
       name="description"
       content="Java Backend Developer — portfolio of Mikhail Trifonov. Microservices, integrations, Java/Scala, distributed systems."
