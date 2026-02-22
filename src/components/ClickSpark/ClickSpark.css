@@ -1,0 +1,40 @@
+.rb-clickspark-root {
+  position: relative;
+}
+
+.rb-clickspark-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.rb-clickspark-burst {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+}
+
+.rb-clickspark-spark {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--rb-spark-size, 10px);
+  height: 2px;
+  border-radius: 999px;
+  background: var(--rb-spark-color, #f00);
+  transform-origin: 0% 50%;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--rb-spark-color, #f00) 55%, transparent));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rb-clickspark-overlay {
+    display: none;
+  }
+}
