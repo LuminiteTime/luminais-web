@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import '../styles/global.css'
 
+import SpiralAnimation from '../components/SpiralAnimation/SpiralAnimation'
+
 const socials = [
   { label: 'GitHub', href: 'https://github.com/LuminiteTime', key: 'gh' },
   { label: 'Telegram', href: 'https://t.me/LuminiteTime', key: 'tg' },
@@ -96,123 +98,7 @@ const timelines = {
   ],
 }
 
-function ParticleField({ className = '' }) {
-  const ref = useRef(null)
 
-  useEffect(() => {
-    const canvas = ref.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    let raf
-    const particles = []
-    let lastTs = performance.now()
-    let cfg = computeConfig()
-    let resizeTimer
-
-    function computeConfig() {
-      const mobile = window.innerWidth <= 768
-      return {
-        max: mobile ? 28 : 90,
-        speed: mobile ? 0.24 : 0.55,
-        connect: mobile ? 110 : 140,
-        margin: mobile ? 18 : 24,
-        radiusBase: mobile ? 1.2 : 1.6,
-        radiusJitter: mobile ? 0.6 : 0.8,
-      }
-    }
-
-    function resize() {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-      cfg = computeConfig()
-      spawn()
-    }
-
-    function spawn() {
-      particles.length = 0
-      for (let i = 0; i < cfg.max; i++) {
-        const angle = Math.random() * Math.PI * 2
-        const speed = cfg.speed
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          r: cfg.radiusBase + Math.random() * cfg.radiusJitter,
-        })
-      }
-    }
-
-    function step(ts) {
-      const now = ts || performance.now()
-      const deltaMs = now - lastTs
-      const resumed = deltaMs > 120
-      const delta = resumed ? 1 : Math.max(deltaMs, 0) / 16.67
-      const dt = Math.min(Math.max(delta || 1, 0.6), resumed ? 1 : 1.15)
-      lastTs = now
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      for (const p of particles) {
-        p.x += p.vx * dt
-        p.y += p.vy * dt
-        const margin = cfg.margin
-        if (p.x < -margin) p.x = canvas.width + margin
-        if (p.x > canvas.width + margin) p.x = -margin
-        if (p.y < -margin) p.y = canvas.height + margin
-        if (p.y > canvas.height + margin) p.y = -margin
-      }
-
-      ctx.fillStyle = 'rgba(230,230,230,0.82)'
-      for (const p of particles) {
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
-        ctx.fill()
-      }
-
-      ctx.strokeStyle = 'rgba(210,210,210,0.4)'
-      ctx.lineWidth = 1
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i]
-          const b = particles[j]
-          const dx = a.x - b.x
-          const dy = a.y - b.y
-          const dist = Math.hypot(dx, dy)
-          if (dist < cfg.connect) {
-            ctx.globalAlpha = 1 - dist / cfg.connect
-            ctx.beginPath()
-            ctx.moveTo(a.x, a.y)
-            ctx.lineTo(b.x, b.y)
-            ctx.stroke()
-          }
-        }
-      }
-      ctx.globalAlpha = 1
-      raf = requestAnimationFrame(step)
-    }
-
-    resize()
-    raf = requestAnimationFrame(step)
-    const handleResize = () => {
-      clearTimeout(resizeTimer)
-      resizeTimer = setTimeout(resize, 120)
-    }
-    window.addEventListener('resize', handleResize)
-    const handleVisibility = () => {
-      if (document.visibilityState === 'visible') {
-        lastTs = performance.now()
-      }
-    }
-    document.addEventListener('visibilitychange', handleVisibility)
-    return () => {
-      cancelAnimationFrame(raf)
-      window.removeEventListener('resize', handleResize)
-      document.removeEventListener('visibilitychange', handleVisibility)
-      clearTimeout(resizeTimer)
-    }
-  }, [])
-
-  return <canvas ref={ref} className={`particle-canvas ${className}`} />
-}
 
 function ContactIcon({ name }) {
   switch (name) {
@@ -258,7 +144,7 @@ const IndexPage = () => (
       const timeline = timelines[lang]
       return (
         <div className="page">
-          <ParticleField className="particle-fixed" />
+          <SpiralAnimation />
 
           <StickyHeader lang={lang} toggleLang={toggle} />
 

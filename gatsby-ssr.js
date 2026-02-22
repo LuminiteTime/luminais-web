@@ -4,7 +4,7 @@ import ClickSpark from './src/components/ClickSpark/ClickSpark'
 
 export const wrapRootElement = ({ element }) => (
   <ClickSpark
-    sparkColor="#78f7a9"
+    sparkColor="#14beb0"
     sparkSize={10}
     sparkRadius={15}
     sparkCount={8}
