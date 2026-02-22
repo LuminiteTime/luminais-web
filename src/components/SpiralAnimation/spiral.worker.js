@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { gsap } from 'gsap'
+/* eslint-disable no-restricted-globals */
 
 class Vector2D {
   constructor(x, y) {
@@ -27,8 +26,7 @@ function mulberry32(seed) {
 }
 
 class AnimationController {
-  constructor(canvas, ctx, opts) {
-    this.canvas = canvas
+  constructor(ctx, opts) {
     this.ctx = ctx
     this.dpr = opts.dpr
     this.width = opts.width
@@ -36,16 +34,14 @@ class AnimationController {
 
     this.time = 0
     this.motionTime = 0
-    this.lastNow = typeof performance !== 'undefined' ? performance.now() : 0
+    this.lastNow = performance.now()
 
     this.isIdle = false
-    this.raf = 0
-
     this.idleTransitionMs = 1000
     this.idleStartNow = 0
     this.idleStartMotionTime = 0
 
-    // Constants (from the shared snippet)
+    // Constants (must match main-thread implementation)
     this.changeEventTime = 0.32
     this.cameraZ = -400
     this.cameraTravelDistance = 3400
@@ -54,30 +50,15 @@ class AnimationController {
     this.numberOfStars = 5000
     this.trailLength = 80
 
-    // End before the "fly away / disappear" phase and then idle forever.
-    // This value is intentionally < 1 so the scene stays populated.
+    // One-shot end time, then float forever
     this.endTime = 0.6
 
     this.rand = mulberry32(1234)
     this.stars = []
     this.createStars()
 
-    this.timeline = gsap.timeline({ repeat: 0 })
-    this.timeline.to(this, {
-      time: this.endTime,
-      duration: 15,
-      ease: 'none',
-      onUpdate: () => this.render(),
-      onComplete: () => {
-        // Hold the last populated state and keep a floating starfield.
-        this.time = this.endTime
-        this.isIdle = true
-        this.idleStartNow = typeof performance !== 'undefined' ? performance.now() : 0
-        this.idleStartMotionTime = this.motionTime
-        this.render()
-        this.startIdleLoop()
-      },
-    })
+    this.idleTimer = 0
+    this.isPaused = false
   }
 
   resize({ dpr, width, height }) {
@@ -87,20 +68,46 @@ class AnimationController {
   }
 
   destroy() {
-    if (this.raf) {
-      if (typeof window !== 'undefined') window.cancelAnimationFrame(this.raf)
-      this.raf = 0
+    if (this.idleTimer) {
+      clearTimeout(this.idleTimer)
+      this.idleTimer = 0
     }
-    if (this.timeline) this.timeline.kill()
+  }
+
+  enterIdle() {
+    this.time = this.endTime
+    this.isIdle = true
+    this.idleStartNow = performance.now()
+    this.idleStartMotionTime = this.motionTime
+    this.render()
+    this.startIdleLoop()
   }
 
   startIdleLoop() {
-    if (this.raf || typeof window === 'undefined') return
+    if (this.idleTimer || this.isPaused) return
     const tick = () => {
+      this.idleTimer = 0
+      if (this.isPaused) return
       this.render()
-      this.raf = window.requestAnimationFrame(tick)
+      this.startIdleLoop()
     }
-    this.raf = window.requestAnimationFrame(tick)
+    // Use a timeout loop to avoid monopolizing CPU.
+    this.idleTimer = setTimeout(tick, 16)
+  }
+
+  pause() {
+    this.isPaused = true
+    if (this.idleTimer) {
+      clearTimeout(this.idleTimer)
+      this.idleTimer = 0
+    }
+  }
+
+  resume() {
+    if (!this.isPaused) return
+    this.isPaused = false
+    this.lastNow = performance.now()
+    if (this.isIdle) this.startIdleLoop()
   }
 
   ease(p, g) {
@@ -201,7 +208,6 @@ class AnimationController {
       const basePos = position
       const offset = new Vector2D(position.x + 5, position.y + 5)
 
-      // Keep subtle motion even during the clamped tail.
       const wobble = Math.sin(this.motionTime * Math.PI * 2) * 0.5 + 0.5
 
       const rotated = this.rotate(basePos, offset, wobble, i % 2 === 0)
@@ -216,14 +222,12 @@ class AnimationController {
     const ctx = this.ctx
     if (!ctx) return
 
-    const now = typeof performance !== 'undefined' ? performance.now() : 0
+    const now = performance.now()
     const dt = this.lastNow ? Math.min(Math.max((now - this.lastNow) / 1000, 0), 0.05) : 0.016
     this.lastNow = now
     this.motionTime += dt
 
-    const idleBlend = this.isIdle
-      ? this.constrain((now - (this.idleStartNow || now)) / this.idleTransitionMs, 0, 1)
-      : 0
+    const idleBlend = this.isIdle ? this.constrain((now - (this.idleStartNow || now)) / this.idleTransitionMs, 0, 1) : 0
 
     const w = this.width
     const h = this.height
@@ -239,13 +243,11 @@ class AnimationController {
     const t1 = this.constrain(this.map(displayTime, 0, this.changeEventTime + 0.25, 0, 1), 0, 1)
     const t2 = this.constrain(this.map(displayTime, this.changeEventTime, 1, 0, 1), 0, 1)
 
-    // Smoothly blend from the animation rotation into a gentle idle drift.
     const baseRotation = -Math.PI * this.ease(t2, 2.7)
     const driftTime = this.isIdle ? Math.max(0, this.motionTime - this.idleStartMotionTime) : 0
     const idleDrift = driftTime * 0.03
     ctx.rotate(baseRotation + idleBlend * idleDrift)
 
-    // Fade out the trail instead of removing it instantly.
     if (idleBlend < 1) {
       ctx.save()
       ctx.globalAlpha = 1 - idleBlend
@@ -378,185 +380,77 @@ class Star {
   }
 }
 
-export default function SpiralAnimation() {
-  const canvasRef = useRef(null)
-  const controllerRef = useRef(null)
-  const workerRef = useRef(null)
-  const usingWorkerRef = useRef(false)
-  const offscreenTransferredRef = useRef(false)
-  const fallbackInitRafRef = useRef(0)
-  const gsapTimelineRef = useRef(null)
-  const gsapTimeDriverRef = useRef({ time: 0 })
-  const workerReadyRef = useRef(false)
-  const workerInitRef = useRef(false)
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+let canvas = null
+let ctx = null
+let controller = null
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return
+function setCanvasSize(dpr, width, height) {
+  if (!canvas || !ctx) return
+  canvas.width = Math.floor(width * dpr)
+  canvas.height = Math.floor(height * dpr)
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+}
 
-    const handleResize = () => {
-      setDimensions({ width: window.innerWidth, height: window.innerHeight })
+self.onmessage = (event) => {
+  const msg = event.data
+  if (!msg || !msg.type) return
+
+  switch (msg.type) {
+    case 'init': {
+      canvas = msg.canvas
+      const dpr = msg.dpr
+      const width = msg.width
+      const height = msg.height
+      ctx = canvas.getContext('2d')
+      setCanvasSize(dpr, width, height)
+      controller = new AnimationController(ctx, { dpr, width, height })
+      controller.render()
+      self.postMessage({ type: 'ready' })
+      break
     }
 
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    // Initialize the worker once (if supported). This keeps heavy star creation + drawing
-    // off the main thread without changing animation parameters.
-    if (!workerInitRef.current) {
-      workerInitRef.current = true
-
-      const offscreenSupported =
-        typeof Worker !== 'undefined' &&
-        typeof canvas.transferControlToOffscreen === 'function' &&
-        typeof OffscreenCanvas !== 'undefined'
-
-      if (offscreenSupported) {
-        try {
-          const worker = new Worker(new URL('./spiral.worker.js', import.meta.url), {
-            type: 'module',
-          })
-
-          workerRef.current = worker
-          usingWorkerRef.current = true
-          workerReadyRef.current = false
-
-          worker.onmessage = (event) => {
-            const msg = event.data
-            if (!msg || !msg.type) return
-            if (msg.type === 'ready') {
-              workerReadyRef.current = true
-
-              // Start the one-shot GSAP timeline only after the worker finishes heavy init.
-              if (!gsapTimelineRef.current) {
-                const driver = gsapTimeDriverRef.current
-                driver.time = 0
-
-                gsapTimelineRef.current = gsap.timeline({ repeat: 0 })
-                gsapTimelineRef.current.to(driver, {
-                  time: 0.6,
-                  duration: 15,
-                  ease: 'none',
-                  onUpdate: () => {
-                    worker.postMessage({ type: 'setTime', time: driver.time })
-                  },
-                  onComplete: () => {
-                    worker.postMessage({ type: 'complete' })
-                  },
-                })
-
-                // Render the first frame immediately.
-                worker.postMessage({ type: 'setTime', time: 0 })
-              }
-            }
-          }
-        } catch (e) {
-          // Fall back to main-thread rendering if worker construction fails.
-          usingWorkerRef.current = false
-          workerRef.current = null
-        }
-      }
+    case 'resize': {
+      if (!controller) break
+      controller.resize({ dpr: msg.dpr, width: msg.width, height: msg.height })
+      setCanvasSize(msg.dpr, msg.width, msg.height)
+      controller.render()
+      break
     }
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
-    const width = Math.max(1, dimensions.width)
-    const height = Math.max(1, dimensions.height)
-
-    // Keep CSS size on the DOM canvas in both modes.
-    canvas.style.width = `${width}px`
-    canvas.style.height = `${height}px`
-
-    if (usingWorkerRef.current && workerRef.current) {
-      // Initialize/resize the offscreen canvas in the worker.
-      // Transfer happens exactly once; subsequent resizes just update dimensions.
-      if (!offscreenTransferredRef.current) {
-        const offscreen = canvas.transferControlToOffscreen()
-        offscreenTransferredRef.current = true
-        workerRef.current.postMessage(
-          { type: 'init', canvas: offscreen, dpr, width, height },
-          [offscreen]
-        )
-      } else {
-        workerRef.current.postMessage({ type: 'resize', dpr, width, height })
-      }
-
-      return
+    case 'setTime': {
+      if (!controller || controller.isPaused) break
+      controller.time = msg.time
+      controller.render()
+      break
     }
 
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
-    canvas.width = Math.floor(width * dpr)
-    canvas.height = Math.floor(height * dpr)
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-
-    if (!controllerRef.current) {
-      if (fallbackInitRafRef.current && typeof window !== 'undefined') {
-        window.cancelAnimationFrame(fallbackInitRafRef.current)
-        fallbackInitRafRef.current = 0
-      }
-
-      if (typeof window !== 'undefined') {
-        // Yield one frame to let layout/images paint before heavy init.
-        fallbackInitRafRef.current = window.requestAnimationFrame(() => {
-          fallbackInitRafRef.current = 0
-          if (!controllerRef.current) {
-            controllerRef.current = new AnimationController(canvas, ctx, { dpr, width, height })
-          } else {
-            controllerRef.current.resize({ dpr, width, height })
-          }
-          controllerRef.current.render()
-        })
-      } else {
-        controllerRef.current = new AnimationController(canvas, ctx, { dpr, width, height })
-        controllerRef.current.render()
-      }
-    } else {
-      controllerRef.current.resize({ dpr, width, height })
-      controllerRef.current.render()
+    case 'complete': {
+      if (!controller) break
+      controller.enterIdle()
+      break
     }
 
-    return () => {
-      // Keep controller alive across resizes; we only destroy on unmount.
+    case 'pause': {
+      if (!controller) break
+      controller.pause()
+      break
     }
-  }, [dimensions])
 
-  useEffect(() => {
-    return () => {
-      if (fallbackInitRafRef.current && typeof window !== 'undefined') {
-        window.cancelAnimationFrame(fallbackInitRafRef.current)
-        fallbackInitRafRef.current = 0
-      }
-
-      if (gsapTimelineRef.current) {
-        gsapTimelineRef.current.kill()
-        gsapTimelineRef.current = null
-      }
-
-      if (workerRef.current) {
-        try {
-          workerRef.current.postMessage({ type: 'destroy' })
-        } catch (e) {
-          // ignore
-        }
-        workerRef.current.terminate()
-        workerRef.current = null
-      }
-
-      if (controllerRef.current) {
-        controllerRef.current.destroy()
-        controllerRef.current = null
-      }
+    case 'resume': {
+      if (!controller) break
+      controller.resume()
+      break
     }
-  }, [])
 
-  return <canvas ref={canvasRef} className="particle-canvas" aria-hidden="true" />
+    case 'destroy': {
+      if (controller) controller.destroy()
+      controller = null
+      canvas = null
+      ctx = null
+      break
+    }
+
+    default:
+      break
+  }
 }
