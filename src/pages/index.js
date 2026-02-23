@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { withPrefix } from 'gatsby'
 import '../styles/global.css'
 
 import SpiralAnimation from '../components/SpiralAnimation/SpiralAnimation'
@@ -153,7 +154,7 @@ const IndexPage = () => (
           <section id="home" className="section hero dark">
             <div className="hero-inner">
               <div className="avatar">
-                <img src="/images/main_me.jpg" alt={t.heroName} />
+                <img src={withPrefix('/images/main_me.jpg')} alt={t.heroName} />
               </div>
               <div className="hero-heading">
                 <h1 className="hero-title">{t.heroName}</h1>
@@ -368,7 +369,7 @@ export default IndexPage
 export const Head = () => (
   <>
     <title>Mikhail Trifonov — Java Backend</title>
-    <link rel="icon" href="/images/main_me.jpg" type="image/jpeg" />
+    <link rel="icon" href={withPrefix('/images/main_me.jpg')} type="image/jpeg" />
     <meta
       name="description"
       content="Java Backend Developer — portfolio of Mikhail Trifonov. Microservices, integrations, Java/Scala, distributed systems."
