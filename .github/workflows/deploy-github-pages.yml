@@ -1,0 +1,74 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compute PATH_PREFIX
+        env:
+          OVERRIDE_PATH_PREFIX: ${{ vars.PATH_PREFIX }}
+        run: |
+          if [ -n "$OVERRIDE_PATH_PREFIX" ]; then
+            echo "PATH_PREFIX=$OVERRIDE_PATH_PREFIX" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          if echo "$REPO_NAME" | grep -qE '\\.github\\.io$'; then
+            echo "PATH_PREFIX=" >> "$GITHUB_ENV"
+          else
+            echo "PATH_PREFIX=/$REPO_NAME" >> "$GITHUB_ENV"
+          fi
+
+      - name: Build
+        env:
+          NODE_ENV: production
+        run: npm run build -- --prefix-paths
+
+      - name: Disable Jekyll
+        run: touch public/.nojekyll
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
