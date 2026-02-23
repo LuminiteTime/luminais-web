@@ -13,6 +13,7 @@ const socials = [
 const copy = {
   en: {
     heroName: 'Mikhail Trifonov',
+    heroAlias: 'aka Luminais',
     heroRole: 'Java Backend Developer',
     introTitle: 'Hey!',
     intro1:
@@ -24,6 +25,7 @@ const copy = {
   },
   ru: {
     heroName: 'Михаил Трифонов',
+    heroAlias: 'aka Luminais',
     heroRole: 'Java Backend разработчик',
     introTitle: 'Привет!',
     intro1:
@@ -153,8 +155,11 @@ const IndexPage = () => (
               <div className="avatar">
                 <img src="/images/main_me.jpg" alt={t.heroName} />
               </div>
-              <h1 className="hero-title">{t.heroName}</h1>
-              <p className="hero-subtitle">{t.heroRole}</p>
+              <div className="hero-heading">
+                <h1 className="hero-title">{t.heroName}</h1>
+                <p className="hero-aka">{t.heroAlias}</p>
+                <p className="hero-subtitle">{t.heroRole}</p>
+              </div>
               <div className="social-row">
                 {socials.map((s) => (
                   <a

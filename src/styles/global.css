@@ -172,6 +172,21 @@ a {
   font-weight: 600;
 }
 
+.hero-heading {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+}
+
+.hero-aka {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--muted-light);
+  opacity: 0.9;
+}
+
 .hero-subtitle {
   margin: 0;
   font-size: 21px;
