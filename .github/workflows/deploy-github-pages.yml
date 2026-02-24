@@ -46,6 +46,11 @@ jobs:
             exit 0
           fi
 
+          if [ -f static/CNAME ] && [ -s static/CNAME ]; then
+            echo "PATH_PREFIX=" >> "$GITHUB_ENV"
+            exit 0
+          fi
+
           REPO_NAME="${GITHUB_REPOSITORY#*/}"
           if echo "$REPO_NAME" | grep -qE '\\.github\\.io$'; then
             echo "PATH_PREFIX=" >> "$GITHUB_ENV"
