@@ -1,4 +1,5 @@
-const pathPrefix = process.env.PATH_PREFIX || ''
+const rawPathPrefix = (process.env.PATH_PREFIX || '').trim()
+const pathPrefix = ['none', 'root', '.'].includes(rawPathPrefix.toLowerCase()) ? '' : rawPathPrefix
 
 module.exports = {
   pathPrefix,

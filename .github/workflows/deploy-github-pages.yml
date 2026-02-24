@@ -35,7 +35,14 @@ jobs:
           OVERRIDE_PATH_PREFIX: ${{ vars.PATH_PREFIX }}
         run: |
           if [ -n "$OVERRIDE_PATH_PREFIX" ]; then
-            echo "PATH_PREFIX=$OVERRIDE_PATH_PREFIX" >> "$GITHUB_ENV"
+            case "${OVERRIDE_PATH_PREFIX}" in
+              none|NONE|root|ROOT|.)
+                echo "PATH_PREFIX=" >> "$GITHUB_ENV"
+                ;;
+              *)
+                echo "PATH_PREFIX=$OVERRIDE_PATH_PREFIX" >> "$GITHUB_ENV"
+                ;;
+            esac
             exit 0
           fi
 
