@@ -287,6 +287,135 @@ a {
   box-shadow: 0 8px 28px oklch(76% 0.17 158 / 0.22);
 }
 
+.icon-link--qr {
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.qr-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.icon-link--qr:focus-visible,
+.terminal-link--qr:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* --- QR reveal (hero popup + terminal output) ----------------------------------- */
+
+/* Dark terminal-styled frame; the QR keeps a white pad so scanners read it. */
+.qr-popup {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  translate: -50% 0;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: oklch(10% 0.018 165 / 0.96);
+  box-shadow: 0 18px 50px oklch(0% 0 0 / 0.55), 0 0 32px oklch(76% 0.17 158 / 0.12);
+  opacity: 0;
+  scale: 0.9;
+  pointer-events: none;
+  transition: opacity 220ms var(--ease-out), scale 220ms var(--ease-out);
+  z-index: 30;
+}
+
+.qr-frame {
+  display: block;
+  padding: 6px;
+  border-radius: 8px;
+  background: oklch(96% 0.005 160);
+}
+
+.qr-frame img {
+  display: block;
+  width: 132px;
+  height: 132px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.qr-caption {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.qr-prompt {
+  color: var(--accent);
+  margin-right: 6px;
+}
+
+.qr-anchor.is-open .qr-popup {
+  opacity: 1;
+  scale: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .qr-anchor:hover .qr-popup,
+  .qr-anchor:focus-within .qr-popup {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* WeChat row toggles inline output instead of linking out. */
+.terminal-link--qr {
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.terminal-caret {
+  margin-left: 8px;
+  color: var(--muted);
+}
+
+.terminal-link--qr[aria-expanded='true'] .terminal-caret {
+  color: var(--accent);
+}
+
+.terminal-qr {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms var(--ease-out);
+}
+
+.terminal-qr.is-open {
+  grid-template-rows: 1fr;
+}
+
+.terminal-qr-inner {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.terminal-qr-inner .qr-frame {
+  margin: 10px 0 4px;
+}
+
+.terminal-qr-inner .qr-frame img {
+  width: 120px;
+  height: 120px;
+}
+
 .scroll-hint {
   display: grid;
   justify-items: center;
@@ -550,6 +679,16 @@ a {
   .terminal-url {
     display: none;
   }
+
+  .qr-popup .qr-frame img {
+    width: 104px;
+    height: 104px;
+  }
+
+  .terminal-qr-inner .qr-frame img {
+    width: 96px;
+    height: 96px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -562,5 +701,10 @@ a {
   .dive-hint,
   .terminal-cursor {
     animation: none;
+  }
+
+  .qr-popup,
+  .terminal-qr {
+    transition: none;
   }
 }

@@ -3,6 +3,7 @@ export const socials = [
   { label: 'Telegram', href: 'https://t.me/LuminiteTime', key: 'tg' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/mikhailtrifonov28', key: 'li' },
   { label: 'Email', href: 'mailto:trifonov2812@gmail.com', key: 'mail' },
+  { label: 'WeChat', href: null, key: 'wechat', id: 'wxid_iduyrsvt6j1622', qr: '/images/wechat.jpg' },
 ]
 
 export const copy = {
@@ -17,6 +18,7 @@ export const copy = {
     nav: { home: 'Home', exp: 'Experience', contact: 'Contact' },
     timelineTitle: 'Timeline',
     contactTitle: 'Contact',
+    wechatScan: 'scan with wechat',
     diveHint: 'entering the machine…',
     scrollHint: 'scroll',
   },
@@ -31,6 +33,7 @@ export const copy = {
     nav: { home: 'Главная', exp: 'Опыт', contact: 'Контакты' },
     timelineTitle: 'Таймлайн',
     contactTitle: 'Контакты',
+    wechatScan: 'сканируй в wechat',
     diveHint: 'входим в машину…',
     scrollHint: 'листай',
   },
