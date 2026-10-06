@@ -1,0 +1,207 @@
+---
+import { Image } from 'astro:assets';
+import portrait from '@/assets/me.png';
+import Button from '@/components/ui/Button.astro';
+import { useTranslations, type Locale } from '@/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale).hero;
+---
+
+<section class="hero" aria-labelledby="hero-name">
+  <div class="copy">
+    <p class="who" data-reveal>
+      <Image
+        src={portrait}
+        alt=""
+        width={56}
+        height={56}
+        densities={[1, 2]}
+        quality={85}
+        class="avatar"
+        loading="eager"
+      />
+      <span class="who-text">
+        <span class="role">{t.role}</span>
+        <span class="alias">{t.alias}</span>
+      </span>
+    </p>
+    <h1 id="hero-name" class="name" aria-label={`${t.firstName} ${t.lastName}`} data-hero-name>
+      <span class="line" data-line>
+        {t.firstName}
+      </span>
+      <span class="line" data-line>
+        {t.lastName}
+      </span>
+    </h1>
+    <p class="lead" data-reveal>
+      {t.lead}
+    </p>
+    <div class="foot" data-reveal>
+      <div class="actions">
+        <Button href="#contact">{t.primary}</Button>
+        <Button href="#work" variant="ghost">
+          {t.secondary}
+        </Button>
+      </div>
+      <ul class="facts">
+        <li class="status">
+          <span class="dot" aria-hidden="true"></span>
+          {t.status}
+        </li>
+        {t.facts.map((fact) => (
+          <li>{fact}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initHeroName } from '@/scripts/hero-name';
+  const name = document.querySelector<HTMLElement>('[data-hero-name]');
+  if (name) initHeroName(name, [...document.querySelectorAll('[data-reveal]')]);
+</script>
+
+<style>
+  /* registered so the browser re-shapes glyphs while GSAP tweens them */
+  @property --w {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 160;
+  }
+
+  @property --s {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 100;
+  }
+
+  .hero {
+    display: grid;
+    align-items: end;
+    min-height: 100svh;
+    padding-block: 120px clamp(40px, 8vh, 88px);
+  }
+
+  .copy {
+    max-width: 44rem;
+  }
+
+  .who {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .avatar {
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--color-on-accent);
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--shadow-avatar);
+  }
+
+  .who-text {
+    display: grid;
+    line-height: var(--leading-snug);
+  }
+
+  .role {
+    font-weight: var(--weight-medium);
+  }
+
+  .alias {
+    font-size: var(--text-xs);
+    color: var(--color-ink-muted);
+  }
+
+  .name {
+    margin-left: -0.05em;
+    font-size: var(--text-hero);
+    font-weight: var(--weight-thin);
+    font-variation-settings: var(--font-sharp-on);
+    letter-spacing: -0.045em;
+    line-height: 0.88;
+    cursor: default;
+  }
+
+  .line {
+    display: block;
+  }
+
+  .name :global(.char) {
+    font-variation-settings:
+      'wght' var(--w),
+      'SHRP' var(--s);
+  }
+
+  .lead {
+    max-width: 34rem;
+    margin-top: 28px;
+    font-size: var(--text-lg);
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px var(--space-6);
+    margin-top: 36px;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) 18px;
+    font-size: var(--text-xs);
+    color: var(--color-ink-muted);
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-ink);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-success);
+    animation: ping 2.4s ease-out infinite;
+  }
+
+  @keyframes ping {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-success) 50%, transparent);
+    }
+    70%,
+    100% {
+      box-shadow: 0 0 0 8px transparent;
+    }
+  }
+
+  /* on narrow screens the scene sits above the copy */
+  @media (max-width: 720px) {
+    .hero {
+      min-height: auto;
+      padding-top: min(52svh, 400px);
+    }
+  }
+</style>

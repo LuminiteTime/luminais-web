@@ -1,0 +1,22 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/** Display heading used for section titles. */
+type Props = HTMLAttributes<'h2'> & { as?: 'h1' | 'h2' };
+
+const { as: Tag = 'h2', class: className, ...rest } = Astro.props;
+---
+
+<Tag class:list={['heading', className]} {...rest}>
+  <slot />
+</Tag>
+
+<style>
+  .heading {
+    font-size: var(--text-display);
+    font-weight: var(--weight-light);
+    font-variation-settings: var(--font-sharp-on);
+    letter-spacing: var(--tracking-display);
+    line-height: var(--leading-tight);
+  }
+</style>

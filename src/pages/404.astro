@@ -1,0 +1,26 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Heading from '@/components/ui/Heading.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { defaultLocale, localePath, useTranslations } from '@/i18n';
+
+const { notFound, meta } = useTranslations(defaultLocale);
+---
+
+<BaseLayout locale={defaultLocale} title={`${notFound.title}, ${meta.title}`} description={notFound.text}>
+  <main class="wrap not-found">
+    <Heading as="h1">{notFound.title}</Heading>
+    <p class="muted">{notFound.text}</p>
+    <Button href={localePath(defaultLocale)}>{notFound.back}</Button>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: var(--space-5);
+    min-height: 100svh;
+  }
+</style>

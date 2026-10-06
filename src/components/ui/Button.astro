@@ -1,0 +1,58 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+/** A link when `href` is set, otherwise a button. */
+type Props = { variant?: 'primary' | 'ghost' } & (
+  ({ href: string } & HTMLAttributes<'a'>) | ({ href?: never } & HTMLAttributes<'button'>)
+);
+
+const { variant = 'primary', class: className, ...rest } = Astro.props;
+const classes = ['btn', `btn-${variant}`, { glass: variant === 'ghost' }, className];
+---
+
+{'href' in rest && rest.href ? (
+  <a class:list={classes} {...(rest as HTMLAttributes<'a'>)}>
+    <slot />
+  </a>
+) : (
+  <button type="button" class:list={classes} {...(rest as HTMLAttributes<'button'>)}>
+    <slot />
+  </button>
+)}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 var(--space-5);
+    border: 0;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform var(--duration-base) var(--ease-out),
+      background-color var(--duration-fast);
+  }
+
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  .btn-primary {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    box-shadow: var(--shadow-accent);
+  }
+
+  .btn-primary:hover {
+    background: var(--color-accent-strong);
+  }
+
+  .btn-ghost:hover {
+    background: var(--surface-glass-strong);
+  }
+</style>

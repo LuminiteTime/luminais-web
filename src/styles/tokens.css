@@ -1,0 +1,104 @@
+/*
+ * Design tokens. The single source of truth for colour, type, space, shape and motion.
+ * Components read only these variables; the WebGL scene reads the --scene-* ones at runtime.
+ */
+:root {
+  /* colour */
+  --color-bg: #f7f8fc;
+  --color-ink: #17183b;
+  --color-ink-muted: #5c6178;
+  --color-line: rgb(23 24 59 / 0.1);
+  --color-line-strong: rgb(23 24 59 / 0.14);
+  --color-accent: #4b3bff;
+  --color-accent-strong: #3424e0;
+  --color-accent-soft: #ece9ff;
+  --color-accent-soft-hover: #dfdaff;
+  --color-accent-line: rgb(75 59 255 / 0.28);
+  --color-on-accent: #fff;
+  --color-success: #22c55e;
+
+  --surface-glass: rgb(255 255 255 / 0.56);
+  --surface-glass-strong: rgb(255 255 255 / 0.85);
+  --surface-glass-border: rgb(255 255 255 / 0.8);
+  --surface-raised: rgb(255 255 255 / 0.9);
+  --surface-overlay: rgb(23 24 59 / 0.2);
+
+  /* scene palette, read by src/scene/palette.ts */
+  --scene-stream-1: #c9c3ff;
+  --scene-stream-2: #d9dcef;
+  --scene-stream-3: #b8b0ff;
+  --scene-stream-4: #e3e1f7;
+  --scene-pulse-alt: #8478ff;
+
+  /* type: one variable family, personality comes from its axes */
+  --font-sans: 'Geologica Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sharp-on: 'SHRP' 100;
+  --font-sharp-off: 'SHRP' 0;
+
+  --text-xs: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.3rem;
+  --text-xl: clamp(1.6rem, 1.2rem + 1.6vw, 2.25rem);
+  --text-2xl: clamp(1.5rem, 0.6rem + 3.6vw, 3.4rem);
+  --text-display: clamp(2.4rem, 1.6rem + 3.6vw, 4.5rem);
+  --text-hero: clamp(3.6rem, 1rem + 11vw, 11rem);
+
+  --weight-thin: 160;
+  --weight-light: 300;
+  --weight-book: 340;
+  --weight-regular: 400;
+  --weight-medium: 520;
+  --weight-semibold: 560;
+  --weight-bold: 640;
+
+  --leading-tight: 1;
+  --leading-snug: 1.3;
+  --leading-body: 1.6;
+  --tracking-display: -0.035em;
+  --tracking-tight: -0.015em;
+
+  --measure: 36rem;
+
+  /* space: 4px base */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-section: clamp(72px, 12vh, 140px);
+  --space-panel: clamp(28px, 5vw, 64px);
+
+  /* shape */
+  --radius-s: 14px;
+  --radius-m: 22px;
+  --radius-l: 32px;
+  --radius-pill: 999px;
+
+  --shadow-glass:
+    inset 0 1px 0 rgb(255 255 255 / 0.95), inset 0 -1px 0 rgb(23 24 59 / 0.04), 0 30px 60px -36px rgb(23 24 59 / 0.28);
+  --shadow-lift: inset 0 1px 0 rgb(255 255 255 / 0.95), 0 36px 70px -36px rgb(23 24 59 / 0.38);
+  --shadow-accent: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 12px 28px -12px rgb(75 59 255 / 0.7);
+  --shadow-chip: 0 1px 3px rgb(23 24 59 / 0.08);
+  --shadow-avatar: 0 8px 20px -8px rgb(23 24 59 / 0.35);
+  --blur-glass: blur(22px) saturate(1.7);
+
+  /* layout */
+  --wrap: min(1180px, 100% - 2 * var(--space-4));
+  --scroll-offset: 88px;
+  --tap-target: 44px;
+
+  /* motion */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --duration-fast: 0.2s;
+  --duration-base: 0.35s;
+
+  /* stacking */
+  --z-scene: -2;
+  --z-veil: -1;
+  --z-nav: 10;
+
+  color-scheme: light;
+}

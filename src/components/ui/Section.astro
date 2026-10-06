@@ -1,0 +1,36 @@
+---
+import type { SectionId } from '@/config/site';
+import Heading from './Heading.astro';
+
+/**
+ * Page section with an anchor id. Pass `title` for a standard heading, or render your own
+ * heading inside with id `${id}-title` (see `titleId`), which the section is labelled by.
+ */
+interface Props {
+  id: SectionId;
+  title?: string;
+}
+
+const { id, title } = Astro.props;
+const titleId = `${id}-title`;
+---
+
+<section id={id} class="section" aria-labelledby={titleId}>
+  {title && (
+    <Heading id={titleId} class="section-title">
+      {title}
+    </Heading>
+  )}
+  <slot />
+</section>
+
+<style>
+  .section {
+    padding-top: var(--space-section);
+    scroll-margin-top: var(--scroll-offset);
+  }
+
+  .section-title {
+    margin-bottom: clamp(var(--space-6), 5vh, 52px);
+  }
+</style>

@@ -1,0 +1,118 @@
+---
+import { sections } from '@/config/site';
+import { localePath, otherLocales, useTranslations, type Locale } from '@/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<header class="nav glass">
+  <a class="brand" href="#top">
+    Luminais
+  </a>
+  <nav aria-label={t.nav.label}>
+    <ul class="links">
+      {sections.map((id) => (
+        <li>
+          <a href={`#${id}`} data-spy>
+            {t.nav.items[id]}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+  {otherLocales(locale).map((alternate) => (
+    <a class="locale" href={localePath(alternate)} hreflang={alternate}>
+      <span aria-hidden="true">{alternate.toUpperCase()}</span>
+      <span class="sr-only" lang={alternate}>
+        {t.nav.switchTo}
+      </span>
+    </a>
+  ))}
+</header>
+
+<script>
+  import { initScrollSpy } from '@/scripts/scroll-spy';
+  initScrollSpy([...document.querySelectorAll<HTMLAnchorElement>('[data-spy]')]);
+</script>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 14px;
+    left: 50%;
+    translate: -50% 0;
+    z-index: var(--z-nav);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: calc(100% - 2 * var(--space-3));
+    padding: 6px;
+    border-radius: var(--radius-pill);
+  }
+
+  .brand {
+    padding: 6px 14px;
+    font-weight: var(--weight-bold);
+    font-variation-settings: var(--font-sharp-on);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .links {
+    display: flex;
+    gap: 2px;
+  }
+
+  .links a,
+  .locale {
+    display: block;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-xs);
+    text-decoration: none;
+    transition:
+      color var(--duration-fast),
+      background-color var(--duration-fast);
+  }
+
+  .links a {
+    color: var(--color-ink-muted);
+  }
+
+  .links a:hover,
+  .links a[aria-current] {
+    color: var(--color-ink);
+  }
+
+  .links a[aria-current] {
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-chip);
+  }
+
+  .locale {
+    font-weight: var(--weight-semibold);
+    background: var(--color-accent-soft);
+  }
+
+  .locale:hover {
+    background: var(--color-accent-soft-hover);
+  }
+
+  @media (max-width: 720px) {
+    .nav {
+      left: var(--space-4);
+      right: var(--space-4);
+      translate: none;
+      justify-content: space-between;
+    }
+
+    .links {
+      display: none;
+    }
+  }
+</style>

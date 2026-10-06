@@ -1,0 +1,146 @@
+---
+import { Image } from 'astro:assets';
+import wechatQr from '@/assets/wechat.jpg';
+import Button from '@/components/ui/Button.astro';
+import Heading from '@/components/ui/Heading.astro';
+import Section from '@/components/ui/Section.astro';
+import { contacts } from '@/config/site';
+import { useTranslations, type Locale } from '@/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale).contact;
+const mailto = `mailto:${contacts.email}`;
+const socials = [
+  { label: 'Telegram', href: contacts.telegram },
+  { label: 'GitHub', href: contacts.github },
+  { label: 'LinkedIn', href: contacts.linkedin },
+];
+---
+
+<Section id="contact">
+  <div class="panel glass">
+    <Heading id="contact-title">{t.title}</Heading>
+    <p class="text muted">{t.text}</p>
+    <div class="mail-row">
+      <a class="mail" href={mailto}>
+        {contacts.email}
+      </a>
+      <Button variant="ghost" data-copy={contacts.email} data-done={t.copied} data-fallback={mailto}>
+        {t.copy}
+      </Button>
+    </div>
+    <ul class="socials">
+      {socials.map(({ label, href }) => (
+        <li>
+          <a class="chip" href={href} target="_blank" rel="noopener">
+            {label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <button class="chip" type="button" popovertarget="wechat">
+          WeChat
+        </button>
+      </li>
+    </ul>
+    <div id="wechat" popover class="wechat glass">
+      <Image src={wechatQr} alt={t.wechatAlt} width={220} height={220} densities={[1, 2]} loading="lazy" />
+      <p>{t.wechatHint}</p>
+      <p class="muted id">{contacts.wechatId}</p>
+    </div>
+  </div>
+</Section>
+
+<script>
+  import { initCopyButtons } from '@/scripts/copy-text';
+  initCopyButtons();
+</script>
+
+<style>
+  .panel {
+    padding: clamp(var(--space-6), 6vw, 80px);
+    border-radius: var(--radius-l);
+  }
+
+  .text {
+    max-width: 30rem;
+    margin-top: var(--space-4);
+  }
+
+  .mail-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-5);
+    margin-top: clamp(28px, 5vh, var(--space-7));
+  }
+
+  .mail {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-light);
+    letter-spacing: var(--tracking-display);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    background: linear-gradient(var(--color-accent), var(--color-accent)) 0 100% / 0 2px no-repeat;
+    transition: background-size 0.45s var(--ease-out);
+  }
+
+  .mail:hover {
+    background-size: 100% 2px;
+  }
+
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 36px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-target);
+    padding: 0 18px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-pill);
+    background: var(--surface-glass);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      border-color var(--duration-fast),
+      background-color var(--duration-fast);
+  }
+
+  .chip:hover {
+    border-color: var(--color-accent);
+    background: var(--surface-raised);
+  }
+
+  .wechat {
+    margin: auto;
+    padding: 22px;
+    border-radius: var(--radius-m);
+    background: var(--surface-glass-strong);
+    color: var(--color-ink);
+    text-align: center;
+  }
+
+  .wechat img {
+    margin-bottom: var(--space-3);
+    border-radius: var(--radius-s);
+  }
+
+  .wechat::backdrop {
+    background: var(--surface-overlay);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  .id {
+    font-size: var(--text-xs);
+  }
+</style>

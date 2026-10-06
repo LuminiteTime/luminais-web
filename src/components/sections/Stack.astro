@@ -1,0 +1,72 @@
+---
+import Section from '@/components/ui/Section.astro';
+import { stack } from '@/content/stack';
+import { useTranslations, type Locale } from '@/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale).stack;
+---
+
+<Section id="stack" title={t.title}>
+  <div class="groups">
+    {stack.map(({ id, label, items }) => (
+      <div>
+        <h3 id={`stack-${id}`}>{label[locale]}</h3>
+        <ul aria-labelledby={`stack-${id}`}>
+          {items.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <p class="languages muted">{t.languages}</p>
+</Section>
+
+<style>
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+
+  h3 {
+    margin-bottom: 14px;
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-accent-line);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    color: var(--color-accent);
+  }
+
+  li {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-book);
+    letter-spacing: -0.01em;
+    line-height: 1.75;
+  }
+
+  .languages {
+    margin-top: 36px;
+  }
+
+  @media (max-width: 960px) {
+    .groups {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    .groups {
+      gap: var(--space-5) var(--space-4);
+    }
+
+    li {
+      font-size: var(--text-base);
+    }
+  }
+</style>

@@ -1,0 +1,201 @@
+---
+import Section from '@/components/ui/Section.astro';
+import { experience } from '@/content/experience';
+import { formatPeriod, useTranslations, type Locale } from '@/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale).experience;
+---
+
+<Section id="experience" title={t.title}>
+  <ol class="timeline">
+    {experience.map(({ start, end, l10n }, index) => {
+      const entry = l10n[locale];
+      const current = !end;
+      return (
+        <li class:list={['entry', { current }]}>
+          <p class="period">
+            <time datetime={start}>{formatPeriod(start, locale)}</time>
+            {current ? <span>{t.present}</span> : <time datetime={end}>{formatPeriod(end, locale)}</time>}
+          </p>
+          <div class="card glass">
+            <h3>
+              {entry.org}
+              <span class="role">{entry.role}</span>
+            </h3>
+            <p class="summary">{entry.summary}</p>
+            {entry.points.length > 0 && (
+              <details open={index === 0}>
+                <summary>{t.details}</summary>
+                <ul class="points">
+                  {entry.points.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              </details>
+            )}
+          </div>
+        </li>
+      );
+    })}
+  </ol>
+</Section>
+
+<style>
+  .timeline {
+    display: grid;
+    gap: 14px;
+  }
+
+  .entry {
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: start;
+  }
+
+  .period {
+    position: sticky;
+    top: 96px;
+    display: grid;
+    padding-top: 22px;
+    font-size: var(--text-xs);
+    color: var(--color-ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .period > :first-child {
+    font-weight: var(--weight-medium);
+    color: var(--color-ink);
+  }
+
+  .current .period > :first-child {
+    color: var(--color-accent);
+  }
+
+  .card {
+    padding: 22px 26px;
+    border-radius: var(--radius-m);
+  }
+
+  h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.01em;
+  }
+
+  .role {
+    font-size: var(--text-base);
+    font-weight: var(--weight-regular);
+    color: var(--color-ink-muted);
+  }
+
+  .summary {
+    max-width: 42rem;
+    margin-top: 6px;
+  }
+
+  details {
+    margin-top: var(--space-3);
+  }
+
+  summary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) 0;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--color-accent);
+    list-style: none;
+    cursor: pointer;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    rotate: 45deg;
+    translate: 0 -2px;
+    transition:
+      rotate var(--duration-fast),
+      translate var(--duration-fast);
+  }
+
+  details[open] summary::after {
+    rotate: 225deg;
+    translate: 0 2px;
+  }
+
+  details::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size var(--duration-base) var(--ease-out),
+      content-visibility var(--duration-base) allow-discrete;
+  }
+
+  details[open]::details-content {
+    block-size: auto;
+  }
+
+  .points {
+    display: grid;
+    gap: var(--space-2);
+    max-width: 44rem;
+    padding-top: var(--space-2);
+  }
+
+  .points li {
+    position: relative;
+    padding-left: 20px;
+    color: var(--color-ink-muted);
+  }
+
+  .points li::before {
+    content: '';
+    position: absolute;
+    top: 0.72em;
+    left: 2px;
+    width: 8px;
+    height: 1.5px;
+    background: var(--color-accent);
+    opacity: 0.6;
+  }
+
+  @media (max-width: 720px) {
+    .entry {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+
+    .period {
+      position: static;
+      display: flex;
+      gap: 6px;
+      padding-top: 0;
+    }
+
+    .period > :last-child::before {
+      content: '/ ';
+    }
+
+    .card {
+      padding: 20px;
+    }
+  }
+</style>
