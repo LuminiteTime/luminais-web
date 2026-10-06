@@ -8,8 +8,8 @@ declare global {
   }
 }
 
-const TAG_URL = 'https://mc.yandex.ru/metrika/tag.js';
 const counterId = Number(services.yandexMetrikaId);
+const TAG_URL = `https://mc.yandex.ru/metrika/tag.js?id=${counterId}`;
 
 /**
  * Yandex Metrika with a deferred tag: calls are queued at once, the 60 KB tag loads when the browser is idle,
@@ -23,7 +23,12 @@ export function initAnalytics(): void {
   };
   queue.l = Date.now();
   window.ym ??= queue;
-  window.ym(counterId, 'init', { ...services.yandexMetrika, ssr: true });
+  window.ym(counterId, 'init', {
+    ...services.yandexMetrika,
+    ssr: true,
+    referrer: document.referrer,
+    url: location.href,
+  });
 
   const load = () => {
     if (document.querySelector(`script[src="${TAG_URL}"]`)) return;

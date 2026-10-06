@@ -29,9 +29,9 @@ export const contacts = {
  * - verification: codes from Yandex Webmaster and Google Search Console (the `content` of their meta tag)
  */
 export const services = {
-  yandexMetrikaId: '',
+  yandexMetrikaId: '113487330',
   yandexMetrika: { webvisor: true, clickmap: true, trackLinks: true, accurateTrackBounce: true },
-  verification: { yandex: '', google: '' },
+  verification: { yandex: '49d0f0899152690c', google: 'qqgKGZPK_mARVFCmf3X4dEInjqCLVGGkt5UQ9eLkSfU' },
 } as const;
 
 /** Page sections in render order. Ids double as URL anchors and nav keys. */
