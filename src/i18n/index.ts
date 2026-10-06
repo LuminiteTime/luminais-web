@@ -11,6 +11,9 @@ const dictionaries: Localized<UiStrings> = { en, ru };
 
 export const useTranslations = (locale: Locale): UiStrings => dictionaries[locale];
 
+/** Open Graph locale codes. */
+export const ogLocales: Localized<string> = { en: 'en_US', ru: 'ru_RU' };
+
 export const localePath = (locale: Locale): string => (locale === defaultLocale ? '/' : `/${locale}/`);
 
 export const otherLocales = (locale: Locale): Locale[] => locales.filter((l) => l !== locale);

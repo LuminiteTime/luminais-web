@@ -15,14 +15,21 @@ const t = useTranslations(locale).work;
 
 <Section id="work" title={t.title}>
   <ul class="grid">
-    {projects.map(({ featured, href, stack, l10n }) => {
+    {projects.map(({ id, featured, href, stack, l10n }) => {
       const p = l10n[locale];
       return (
         <li class:list={['tile glass', { featured }]}>
           <p class="context">{p.context}</p>
           <h3>
             {href ? (
-              <a class="tile-link" href={href} target="_blank" rel="noopener">
+              <a
+                class="tile-link"
+                href={href}
+                target="_blank"
+                rel="noopener"
+                data-goal="project_open"
+                data-goal-label={id}
+              >
                 {p.title}
                 <ExternalIcon />
               </a>
@@ -38,7 +45,7 @@ const t = useTranslations(locale).work;
     })}
   </ul>
   <p class="more">
-    <a class="link" href={contacts.github} target="_blank" rel="noopener">
+    <a class="link" href={contacts.github} target="_blank" rel="noopener" data-goal="social" data-goal-label="GitHub">
       {t.more}
     </a>
   </p>

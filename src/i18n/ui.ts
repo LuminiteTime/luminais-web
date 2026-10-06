@@ -3,10 +3,12 @@
 export const en = {
   localeName: 'English',
   meta: {
-    title: 'Mikhail Trifonov, software engineer',
+    title: 'Mikhail Trifonov, Software Engineer at T-Bank Data Platform',
     description:
-      'Software engineer at T-Bank Data Platform. Spark SQL, Airflow, Java and Python on the data side, React and TypeScript on the front.',
-    jobTitle: 'Software Engineer',
+      'Mikhail Trifonov (Luminais), software engineer at T-Bank Data Platform. Spark SQL, Airflow, Java and Python pipelines, React and TypeScript frontends.',
+    jobTitle: 'Software Engineer, Data Platform',
+    ogImage: '/og.jpg',
+    ogImageAlt: 'Mikhail Trifonov, software engineer. Glass panes with data streams flowing through them.',
   },
   nav: {
     label: 'Sections',
@@ -50,10 +52,12 @@ export type UiStrings = typeof en;
 export const ru: UiStrings = {
   localeName: 'Русский',
   meta: {
-    title: 'Михаил Трифонов, разработчик',
+    title: 'Михаил Трифонов, разработчик в Т-Банке, Data Platform',
     description:
-      'Разработчик в Т-Банке, Data Platform. Spark SQL, Airflow, Java и Python в данных, React и TypeScript на фронте.',
-    jobTitle: 'Разработчик',
+      'Михаил Трифонов (Luminais), разработчик в Т-Банке, Data Platform. Пайплайны на Spark SQL, Airflow, Java и Python, фронтенд на React и TypeScript.',
+    jobTitle: 'Разработчик, Data Platform',
+    ogImage: '/og-ru.jpg',
+    ogImageAlt: 'Михаил Трифонов, разработчик. Стеклянные панели, сквозь которые текут потоки данных.',
   },
   nav: {
     label: 'Разделы',

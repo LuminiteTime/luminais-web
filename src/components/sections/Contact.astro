@@ -26,23 +26,29 @@ const socials = [
     <Heading id="contact-title">{t.title}</Heading>
     <p class="text muted">{t.text}</p>
     <div class="mail-row">
-      <a class="mail" href={mailto}>
+      <a class="mail" href={mailto} data-goal="email_click">
         {contacts.email}
       </a>
-      <Button variant="ghost" data-copy={contacts.email} data-done={t.copied} data-fallback={mailto}>
+      <Button
+        variant="ghost"
+        data-goal="email_copy"
+        data-copy={contacts.email}
+        data-done={t.copied}
+        data-fallback={mailto}
+      >
         {t.copy}
       </Button>
     </div>
     <ul class="socials">
       {socials.map(({ label, href }) => (
         <li>
-          <a class="chip" href={href} target="_blank" rel="noopener">
+          <a class="chip" href={href} target="_blank" rel="noopener" data-goal="social" data-goal-label={label}>
             {label}
           </a>
         </li>
       ))}
       <li>
-        <button class="chip" type="button" popovertarget="wechat">
+        <button class="chip" type="button" popovertarget="wechat" data-goal="social" data-goal-label="WeChat">
           WeChat
         </button>
       </li>

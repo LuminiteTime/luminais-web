@@ -11,7 +11,11 @@ export default defineConfig({
   integrations: [
     sitemap({
       i18n: { defaultLocale: 'en', locales: { en: 'en', ru: 'ru' } },
-      filter: (page) => !page.includes('/404'),
+      // only HTML pages: skip 404 and generated text files
+      filter: (page) => !page.includes('/404') && !/\.(txt|webmanifest)$/.test(page),
+      lastmod: new Date(),
+      changefreq: 'monthly',
+      priority: 1,
     }),
   ],
   vite: {

@@ -26,7 +26,13 @@ const t = useTranslations(locale);
     </ul>
   </nav>
   {otherLocales(locale).map((alternate) => (
-    <a class="locale" href={localePath(alternate)} hreflang={alternate}>
+    <a
+      class="locale"
+      href={localePath(alternate)}
+      hreflang={alternate}
+      data-goal="locale_switch"
+      data-goal-label={alternate}
+    >
       <span aria-hidden="true">{alternate.toUpperCase()}</span>
       <span class="sr-only" lang={alternate}>
         {t.nav.switchTo}

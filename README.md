@@ -32,15 +32,16 @@ pnpm install
 pnpm dev          # http://localhost:4321
 ```
 
-| Script         | What it does                                       |
-| -------------- | -------------------------------------------------- |
-| `pnpm dev`     | Dev server with HMR                                |
-| `pnpm build`   | Static build into `dist/`                          |
-| `pnpm preview` | Serves `dist/` locally                             |
-| `pnpm check`   | Type checks `.astro` and `.ts`                     |
-| `pnpm lint`    | ESLint                                             |
-| `pnpm format`  | Prettier, writes changes                           |
-| `pnpm verify`  | Format check, lint, type check and build, as in CI |
+| Script         | What it does                                        |
+| -------------- | --------------------------------------------------- |
+| `pnpm dev`     | Dev server with HMR                                 |
+| `pnpm build`   | Static build into `dist/`                           |
+| `pnpm preview` | Serves `dist/` locally                              |
+| `pnpm check`   | Type checks `.astro` and `.ts`                      |
+| `pnpm lint`    | ESLint                                              |
+| `pnpm format`  | Prettier, writes changes                            |
+| `pnpm verify`  | Format check, lint, type check and build, as in CI  |
+| `pnpm icons`   | Renders PNG and ICO icons from `public/favicon.svg` |
 
 ## Project structure
 
@@ -59,10 +60,14 @@ src/
 │   └── sections/           Hero, Now, Experience, Work, Stack, Contact
 ├── scene/                  WebGL backdrop: config, palette, panes, streams, shaders
 ├── scripts/                client behaviour: backdrop, hero-name, scroll-spy, copy-text, smooth-scroll
-├── lib/env.ts              browser capability helpers
+├── lib/                    env helpers, schema.org graph, llms.txt builders
 └── pages/
     ├── [...locale].astro   one route per locale: / and /ru/
-    └── 404.astro
+    ├── 404.astro           noindex
+    ├── robots.txt.ts       generated from config
+    ├── llms.txt.ts         llmstxt.org index for language models
+    ├── llms-full.txt.ts    the whole profile as Markdown
+    └── manifest.webmanifest.ts
 ```
 
 ## Architecture
@@ -99,16 +104,17 @@ text stays soft (`SHRP 0`). The hero name tweens `wght` and `SHRP` per letter.
 
 ## Editing content
 
-| Task                     | File                                                                                                                      |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| Add a T-Bank achievement | `src/content/highlights.ts`, and a bullet in `src/content/experience.ts`                                                  |
-| Add a job                | `src/content/experience.ts` (`start: 'YYYY-MM'`, omit `end` for current)                                                  |
-| Add a project            | `src/content/projects.ts` (`featured: true` for a wide tile)                                                              |
-| Change stack             | `src/content/stack.ts`                                                                                                    |
-| Change interface text    | `src/i18n/ui.ts`                                                                                                          |
-| Change contacts          | `src/config/site.ts`                                                                                                      |
-| Add a section            | component in `components/sections`, id in `config/site.ts`, label in `i18n/ui.ts`                                         |
-| Add a locale             | `locales` in `src/i18n/index.ts` and `astro.config.mjs`, a dictionary in `ui.ts`; the compiler lists every missing string |
+| Task                              | File                                                                                                                      |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Add a T-Bank achievement          | `src/content/highlights.ts`, and a bullet in `src/content/experience.ts`                                                  |
+| Add a job                         | `src/content/experience.ts` (`start: 'YYYY-MM'`, omit `end` for current)                                                  |
+| Add a project                     | `src/content/projects.ts` (`featured: true` for a wide tile)                                                              |
+| Change stack                      | `src/content/stack.ts`                                                                                                    |
+| Change interface text             | `src/i18n/ui.ts`                                                                                                          |
+| Change contacts                   | `src/config/site.ts`                                                                                                      |
+| Page title, description, OG image | `meta` in `src/i18n/ui.ts`                                                                                                |
+| Add a section                     | component in `components/sections`, id in `config/site.ts`, label in `i18n/ui.ts`                                         |
+| Add a locale                      | `locales` in `src/i18n/index.ts` and `astro.config.mjs`, a dictionary in `ui.ts`; the compiler lists every missing string |
 
 Dates are formatted with `Intl.DateTimeFormat`, so `2025-09` renders as "Sep 2025" and "Сент 2025".
 
@@ -129,12 +135,48 @@ Lighthouse on the production build:
 | Profile | Performance | Accessibility | Best practices | SEO |
 | ------- | ----------- | ------------- | -------------- | --- |
 | Desktop | 100         | 100           | 100            | 100 |
-| Mobile  | 85          | 100           | 100            | 100 |
+| Mobile  | 85 to 95    | 100           | 100            | 100 |
 
 - CSS is inlined, fonts for the current locale are preloaded, images go through `astro:assets` (WebP, 1x/2x).
 - Initial JS is ~36 KB gzip (Lenis, GSAP, page scripts). three.js (~136 KB gzip) loads after first paint and only when WebGL2 is available and Save-Data is off.
 - Semantic landmarks, visible focus, `aria-current` in the nav, native `<details>` and `popover`.
 - Sitemap with hreflang, canonical URLs, Open Graph, JSON-LD `Person`.
+
+## SEO
+
+- Per-locale `<title>`, description, canonical, `hreflang` (with `x-default`) and Open Graph image.
+- JSON-LD graph: `WebSite`, `ProfilePage` and `Person` (employer, university, location, languages,
+  `knowsAbout` from the stack, `sameAs` profiles). Built in `src/lib/structured-data.ts`.
+- Sitemap with `lastmod` and hreflang alternates, `robots.txt`, web manifest, favicon set
+  (SVG, ICO, Apple touch, 192 and 512 PNG). Icons are rendered by `tools/generate-icons.mjs`.
+- `llms.txt` and `llms-full.txt` give language models a clean Markdown profile. Both are generated from
+  `src/content`, so they never drift from the page.
+
+## Analytics
+
+[Yandex Metrika](https://metrika.yandex.ru) is wired but stays off until a counter id is set:
+
+1. Create a counter for `luminais.tech` at metrika.yandex.ru.
+2. Put its number into `services.yandexMetrikaId` in `src/config/site.ts`.
+3. Webvisor, click map and link tracking flags live next to it in `services.yandexMetrika`.
+
+The tag loads when the browser is idle (earlier calls are queued), so it does not affect first paint.
+Clicks on elements with `data-goal` are sent as goals. Create goals of type "JavaScript event" in Metrika
+with these identifiers:
+
+| Goal            | Fired by                           | Parameter              |
+| --------------- | ---------------------------------- | ---------------------- |
+| `cta_contact`   | Hero "Get in touch"                |                        |
+| `cta_projects`  | Hero "See projects"                |                        |
+| `email_click`   | Email link                         |                        |
+| `email_copy`    | "Copy email" button                |                        |
+| `social`        | Telegram, GitHub, LinkedIn, WeChat | `label`: network       |
+| `project_open`  | Project tile with a link           | `label`: project id    |
+| `locale_switch` | EN/RU switch                       | `label`: target locale |
+| `source_code`   | Footer source link                 |                        |
+
+Search console verification codes go into `services.verification` (`yandex`, `google`); the meta tags render
+automatically.
 
 ## Deployment
 

@@ -4,8 +4,9 @@ import '@/styles/global.css';
 import latinFont from '@fontsource-variable/geologica/files/geologica-latin-full-normal.woff2?url';
 import cyrillicFont from '@fontsource-variable/geologica/files/geologica-cyrillic-full-normal.woff2?url';
 import Seo from '@/components/layout/Seo.astro';
+import Analytics from '@/components/layout/Analytics.astro';
 import Backdrop from '@/components/layout/Backdrop.astro';
-import { site } from '@/config/site';
+import { services, site } from '@/config/site';
 import type { Locale } from '@/i18n';
 
 interface Props {
@@ -25,7 +26,11 @@ const preloadFonts = locale === 'ru' ? [cyrillicFont, latinFont] : [latinFont];
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content={site.themeColor} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    {services.yandexMetrikaId && <link rel="preconnect" href="https://mc.yandex.ru" />}
     {preloadFonts.map((href) => (
       <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />
     ))}
@@ -34,6 +39,7 @@ const preloadFonts = locale === 'ru' ? [cyrillicFont, latinFont] : [latinFont];
   <body>
     <Backdrop />
     <slot />
+    <Analytics />
     <script>
       import { initSmoothScroll } from '@/scripts/smooth-scroll';
       initSmoothScroll();

@@ -1,0 +1,20 @@
+---
+import { services } from '@/config/site';
+
+/** Yandex Metrika. Renders nothing until `services.yandexMetrikaId` is set. */
+const id = services.yandexMetrikaId;
+---
+
+{id && (
+  <>
+    <script>
+      import { initAnalytics } from '@/scripts/analytics';
+      initAnalytics();
+    </script>
+    <noscript>
+      <div>
+        <img src={`https://mc.yandex.ru/watch/${id}`} style="position:absolute;left:-9999px" alt="" />
+      </div>
+    </noscript>
+  </>
+)}

@@ -43,8 +43,10 @@ const t = useTranslations(locale).hero;
     </p>
     <div class="foot" data-reveal>
       <div class="actions">
-        <Button href="#contact">{t.primary}</Button>
-        <Button href="#work" variant="ghost">
+        <Button href="#contact" data-goal="cta_contact">
+          {t.primary}
+        </Button>
+        <Button href="#work" variant="ghost" data-goal="cta_projects">
           {t.secondary}
         </Button>
       </div>

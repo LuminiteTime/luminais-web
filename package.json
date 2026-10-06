@@ -15,7 +15,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify": "pnpm format:check && pnpm lint && pnpm check && pnpm build"
+    "verify": "pnpm format:check && pnpm lint && pnpm check && pnpm build",
+    "icons": "node tools/generate-icons.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
