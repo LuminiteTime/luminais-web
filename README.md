@@ -173,7 +173,6 @@ with these identifiers:
 | `social`        | Telegram, GitHub, LinkedIn, WeChat | `label`: network       |
 | `project_open`  | Project tile with a link           | `label`: project id    |
 | `locale_switch` | EN/RU switch                       | `label`: target locale |
-| `source_code`   | Footer source link                 |                        |
 
 Search console verification codes go into `services.verification` (`yandex`, `google`); the meta tags render
 automatically.

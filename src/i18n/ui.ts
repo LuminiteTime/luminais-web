@@ -43,7 +43,6 @@ export const en = {
     wechatHint: 'Scan in WeChat',
     wechatAlt: 'WeChat QR code',
   },
-  footer: { built: 'Built with Astro and three.js', source: 'Source' },
   notFound: { title: 'Page not found', text: 'This address leads nowhere.', back: 'Go to the main page' },
 };
 
@@ -92,6 +91,5 @@ export const ru: UiStrings = {
     wechatHint: 'Отсканируйте в WeChat',
     wechatAlt: 'QR-код WeChat',
   },
-  footer: { built: 'Сделано на Astro и three.js', source: 'Исходники' },
   notFound: { title: 'Страница не найдена', text: 'По этому адресу ничего нет.', back: 'На главную' },
 };
