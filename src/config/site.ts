@@ -12,7 +12,7 @@ export const site = {
   languages: ['ru', 'en'],
   repo: 'https://github.com/LuminiteTime/luminais-web',
   /** Browser UI colour. Keep in sync with --color-bg in src/styles/tokens.css. */
-  themeColor: '#f7f8fc',
+  themeColor: '#f5f7f5',
 } as const;
 
 export const contacts = {

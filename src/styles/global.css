@@ -30,7 +30,7 @@ body {
 :root[data-scene='off'] body {
   background:
     radial-gradient(60% 50% at 75% 30%, var(--color-accent-soft) 0%, transparent 70%),
-    radial-gradient(40% 40% at 20% 80%, var(--scene-stream-4) 0%, transparent 70%), var(--color-bg);
+    radial-gradient(40% 40% at 20% 80%, var(--scene-brick-2) 0%, transparent 70%), var(--color-bg);
   background-attachment: fixed;
 }
 

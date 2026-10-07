@@ -6,11 +6,11 @@
 ![three.js](https://img.shields.io/badge/three.js-r186-000000?logo=threedotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![pnpm](https://img.shields.io/badge/pnpm-11-F69220?logo=pnpm&logoColor=white)
-![Lighthouse](https://img.shields.io/badge/Lighthouse_desktop-100%2F100%2F100%2F100-0CCE6B?logo=lighthouse&logoColor=white)
+![Lighthouse](https://img.shields.io/badge/Lighthouse_performance-100%20desktop%20%C2%B7%2099%20mobile-0CCE6B?logo=lighthouse&logoColor=white)
 
 Personal site of Mikhail Trifonov (Luminais), software engineer at T-Bank Data Platform.
-A static, bilingual (EN/RU) one-pager with a WebGL backdrop: three glass panes stand for pipeline stages,
-data streams enter them tangled and leave ordered.
+A static, bilingual (EN/RU) one-pager with a WebGL backdrop: a cloud of ceramic bricks sorts itself while you
+scroll, first into partition columns, then into one solid table. ETL as a physical process.
 
 ## Stack
 
@@ -58,7 +58,7 @@ src/
 │   ├── ui/                 primitives: Button, Heading, Section, ExternalIcon
 │   ├── layout/             Seo, SiteNav, SiteFooter, Backdrop
 │   └── sections/           Hero, Now, Experience, Work, Stack, Contact
-├── scene/                  WebGL backdrop: config, palette, panes, streams, shaders
+├── scene/                  WebGL backdrop: config, layouts, bricks, palette
 ├── scripts/                client behaviour: backdrop, hero-name, scroll-spy, copy-text, smooth-scroll
 ├── lib/                    env helpers, schema.org graph, llms.txt builders
 └── pages/
@@ -93,7 +93,7 @@ All visual decisions are tokens in [`src/styles/tokens.css`](src/styles/tokens.c
 | ------- | ----------------------------------------------------------------------------- |
 | Colour  | `--color-bg` `--color-ink` `--color-ink-muted` `--color-accent` …             |
 | Surface | `--surface-glass` `--surface-raised` `--blur-glass` `--shadow-glass`          |
-| Scene   | `--scene-stream-1…4` `--scene-pulse-alt` (read by WebGL at runtime)           |
+| Scene   | `--scene-brick-1…3` plus `--color-accent` (read by WebGL at runtime)          |
 | Type    | `--text-xs … --text-hero`, `--weight-thin … --weight-bold`, `--font-sharp-on` |
 | Space   | `--space-1 … --space-8` on a 4px base, `--space-section`, `--space-panel`     |
 | Shape   | `--radius-s` `--radius-m` `--radius-l` `--radius-pill`                        |
@@ -120,13 +120,24 @@ Dates are formatted with `Intl.DateTimeFormat`, so `2025-09` renders as "Sep 202
 
 ## Scene
 
-Tunables live in [`src/scene/config.ts`](src/scene/config.ts): pane count and spacing, stream count, camera,
-scroll response, intro timing. Colours come from tokens.
+Data as physical material. A few hundred ceramic bricks hang in a mixed cloud in the hero. While the page
+scrolls they sort themselves by colour into partition columns (sized unevenly on purpose, like real data with
+skew), then pack into one solid table where the sorted keys show as stripes. The cursor pushes bricks along the
+line of sight; springs pull them back.
 
-- Streams are merged into one geometry with per-vertex attributes: a single draw call.
+| File         | Role                                                                                              |
+| ------------ | ------------------------------------------------------------------------------------------------- |
+| `config.ts`  | All tunables: brick size and count, partition shares, spring stiffness, cursor force, camera, rig |
+| `layouts.ts` | Pure layout maths: cloud, columns and table positions per brick                                   |
+| `bricks.ts`  | One `InstancedMesh`, a damped spring per brick, cursor repulsion                                  |
+| `index.ts`   | Renderer, lights and shadows, camera, rig placement, frame loop                                   |
+| `palette.ts` | Brick colours from design tokens                                                                  |
+
+- All bricks are one instanced mesh: a single draw call.
 - Shaders compile with `renderer.compileAsync`, so the first frame does not block input.
-- Phones and coarse pointers get the `low` quality tier (fewer streams, lower pixel ratio).
-- The loop pauses in background tabs. With `prefers-reduced-motion` it renders only on scroll or resize.
+- Phones and coarse pointers get the `low` tier: fewer bricks, no shadows, lower pixel ratio.
+- The loop pauses in background tabs. With `prefers-reduced-motion` bricks snap to place and the scene renders
+  only on scroll or resize.
 
 ## Performance and accessibility
 
@@ -134,8 +145,10 @@ Lighthouse on the production build:
 
 | Profile | Performance | Accessibility | Best practices | SEO |
 | ------- | ----------- | ------------- | -------------- | --- |
-| Desktop | 100         | 100           | 100            | 100 |
-| Mobile  | 85 to 95    | 100           | 100            | 100 |
+| Desktop | 100         | 100           | 77             | 100 |
+| Mobile  | 99          | 100           | 77             | 100 |
+
+Best practices loses points only for third-party cookies set by the Yandex Metrika tag; without the counter it is 100.
 
 - CSS is inlined, fonts for the current locale are preloaded, images go through `astro:assets` (WebP, 1x/2x).
 - Initial JS is ~36 KB gzip (Lenis, GSAP, page scripts). three.js (~136 KB gzip) loads after first paint and only when WebGL2 is available and Save-Data is off.

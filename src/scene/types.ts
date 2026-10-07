@@ -1,11 +1,17 @@
-/** Per-frame inputs shared by scene parts. All values are already smoothed. */
+import type { Vector3 } from 'three';
+
+/** Per-frame inputs shared by scene parts. */
 export interface FrameState {
   /** Seconds since mount, frozen when motion is reduced. */
   time: number;
-  /** Page scroll progress, 0..1. */
+  /** Seconds since the previous frame, clamped. */
+  dt: number;
+  /** Smoothed page scroll progress, 0..1. */
   scroll: number;
-  /** Intro progress, 0..1, eased. */
-  intro: number;
+  /** Cursor as a ray in rig space, or null when there is none. */
+  pointer: { origin: Vector3; direction: Vector3 } | null;
+  /** False when motion is reduced: parts snap to their targets. */
+  animated: boolean;
 }
 
 export interface ScenePart {

@@ -4,31 +4,29 @@
  */
 :root {
   /* colour */
-  --color-bg: #f7f8fc;
-  --color-ink: #17183b;
-  --color-ink-muted: #5c6178;
-  --color-line: rgb(23 24 59 / 0.1);
-  --color-line-strong: rgb(23 24 59 / 0.14);
-  --color-accent: #4b3bff;
-  --color-accent-strong: #3424e0;
-  --color-accent-soft: #ece9ff;
-  --color-accent-soft-hover: #dfdaff;
-  --color-accent-line: rgb(75 59 255 / 0.28);
+  --color-bg: #f5f7f5;
+  --color-ink: #13211a;
+  --color-ink-muted: #59665f;
+  --color-line: rgb(19 33 26 / 0.1);
+  --color-line-strong: rgb(19 33 26 / 0.14);
+  --color-accent: #087f52;
+  --color-accent-strong: #066642;
+  --color-accent-soft: #e2f2e9;
+  --color-accent-soft-hover: #d0eadb;
+  --color-accent-line: rgb(8 127 82 / 0.3);
   --color-on-accent: #fff;
-  --color-success: #22c55e;
+  --color-success: #12b76a;
 
   --surface-glass: rgb(255 255 255 / 0.56);
   --surface-glass-strong: rgb(255 255 255 / 0.85);
   --surface-glass-border: rgb(255 255 255 / 0.8);
   --surface-raised: rgb(255 255 255 / 0.9);
-  --surface-overlay: rgb(23 24 59 / 0.2);
+  --surface-overlay: rgb(19 33 26 / 0.2);
 
-  /* scene palette, read by src/scene/palette.ts */
-  --scene-stream-1: #c9c3ff;
-  --scene-stream-2: #d9dcef;
-  --scene-stream-3: #b8b0ff;
-  --scene-stream-4: #e3e1f7;
-  --scene-pulse-alt: #8478ff;
+  /* scene palette, read by src/scene/palette.ts; the accent brick uses --color-accent */
+  --scene-brick-1: #ffffff;
+  --scene-brick-2: #e3ebe6;
+  --scene-brick-3: #c4d4ca;
 
   /* type: one variable family, personality comes from its axes */
   --font-sans: 'Geologica Variable', ui-sans-serif, system-ui, sans-serif;
@@ -78,11 +76,11 @@
   --radius-pill: 999px;
 
   --shadow-glass:
-    inset 0 1px 0 rgb(255 255 255 / 0.95), inset 0 -1px 0 rgb(23 24 59 / 0.04), 0 30px 60px -36px rgb(23 24 59 / 0.28);
-  --shadow-lift: inset 0 1px 0 rgb(255 255 255 / 0.95), 0 36px 70px -36px rgb(23 24 59 / 0.38);
-  --shadow-accent: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 12px 28px -12px rgb(75 59 255 / 0.7);
-  --shadow-chip: 0 1px 3px rgb(23 24 59 / 0.08);
-  --shadow-avatar: 0 8px 20px -8px rgb(23 24 59 / 0.35);
+    inset 0 1px 0 rgb(255 255 255 / 0.95), inset 0 -1px 0 rgb(19 33 26 / 0.04), 0 30px 60px -36px rgb(19 33 26 / 0.28);
+  --shadow-lift: inset 0 1px 0 rgb(255 255 255 / 0.95), 0 36px 70px -36px rgb(19 33 26 / 0.38);
+  --shadow-accent: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 12px 28px -12px rgb(8 127 82 / 0.55);
+  --shadow-chip: 0 1px 3px rgb(19 33 26 / 0.08);
+  --shadow-avatar: 0 8px 20px -8px rgb(19 33 26 / 0.35);
   --blur-glass: blur(22px) saturate(1.7);
 
   /* layout */
