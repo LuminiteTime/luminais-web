@@ -9,8 +9,8 @@
 ![Lighthouse](https://img.shields.io/badge/Lighthouse_performance-100%20desktop%20%C2%B7%2099%20mobile-0CCE6B?logo=lighthouse&logoColor=white)
 
 Personal site of Mikhail Trifonov (Luminais), software engineer at T-Bank Data Platform.
-A static, bilingual (EN/RU) one-pager with a WebGL backdrop: a cloud of matte blocks sorts itself while you
-scroll, first into partition columns, then into one solid table. ETL as a physical process.
+A static, bilingual (EN/RU) one-pager with a WebGL backdrop: matte blocks act out the data lifecycle while you
+scroll: a raw cloud, an ingestion stream, sorted partitions, a curated table and an orbit around the contact card.
 
 ## Stack
 
@@ -120,24 +120,37 @@ Dates are formatted with `Intl.DateTimeFormat`, so `2025-09` renders as "Sep 202
 
 ## Scene
 
-Data as physical material. A few hundred matte blocks of odd shapes hang in a mixed cloud in the hero. While the
-page scrolls they are normalised to one size and sorted by colour into partition columns (sized unevenly on purpose, like real data with
-skew), then pack into one solid table where the sorted keys show as stripes. The cursor pushes bricks along the
-line of sight; springs pull them back.
+Data as physical material. A few hundred matte blocks act out the data lifecycle as the page scrolls, one stage
+per section:
 
-| File         | Role                                                                                              |
-| ------------ | ------------------------------------------------------------------------------------------------- |
-| `config.ts`  | All tunables: brick size and count, partition shares, spring stiffness, cursor force, camera, rig |
-| `layouts.ts` | Pure layout maths: cloud, columns and table positions per brick                                   |
-| `bricks.ts`  | One `InstancedMesh`, a damped spring per brick, cursor repulsion                                  |
-| `index.ts`   | Renderer, lights and shadows, camera, rig placement, frame loop                                   |
-| `palette.ts` | Brick colours from design tokens                                                                  |
+| Section     | Stage     | What the blocks do                                                       |
+| ----------- | --------- | ------------------------------------------------------------------------ |
+| Hero        | `cloud`   | Raw data: odd shapes in a mixed, drifting cloud                          |
+| Now         | `stream`  | Ingestion: a turning helix across the whole screen                       |
+| Experience  | `columns` | Sorted by colour into partitions of uneven size, normalised to one shape |
+| Work, Stack | `table`   | One curated table, sorted keys show as stripes                           |
+| Contact     | `ring`    | Served: a slow orbit framing the contact card                            |
 
-- All bricks are one instanced mesh: a single draw call.
+Every block rides a damped spring, so moves overshoot and settle, and the cursor pushes blocks along the line of
+sight. Sections declare their stage through `data-stage` (mapped in `sectionStages`, `src/config/site.ts`);
+`scripts/backdrop.ts` turns the reading position into a continuous stage value, so the choreography follows the
+content however long it gets.
+
+| File         | Role                                                                                           |
+| ------------ | ---------------------------------------------------------------------------------------------- |
+| `config.ts`  | Stages (layout, tumble, raw shape, rig placement for wide and narrow screens) and all tunables |
+| `layouts.ts` | Layout maths: where each block sits in every stage, moving layouts animate with time           |
+| `bricks.ts`  | One `InstancedMesh`, a damped spring per block, cursor repulsion                               |
+| `index.ts`   | Renderer, lights and shadows, camera, rig blending between stages, frame loop                  |
+| `palette.ts` | Block colours from design tokens                                                               |
+
+- All blocks are one instanced mesh: a single draw call.
 - Shaders compile with `renderer.compileAsync`, so the first frame does not block input.
-- Phones and coarse pointers get the `low` tier: fewer bricks, no shadows, lower pixel ratio.
-- The loop pauses in background tabs. With `prefers-reduced-motion` bricks snap to place and the scene renders
-  only on scroll or resize.
+- Phones and coarse pointers get the `low` tier: fewer blocks, no shadows, lower pixel ratio.
+- Glass panels use `contrast()` and `brightness()` in `backdrop-filter`, so shapes stay visible behind text without
+  hurting contrast.
+- The loop pauses in background tabs. With `prefers-reduced-motion` blocks snap to place and the scene renders only
+  on scroll or resize.
 
 ## Performance and accessibility
 

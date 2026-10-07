@@ -1,5 +1,5 @@
 ---
-import type { SectionId } from '@/config/site';
+import { sectionStages, type SectionId } from '@/config/site';
 import Heading from './Heading.astro';
 
 /**
@@ -15,7 +15,7 @@ const { id, title } = Astro.props;
 const titleId = `${id}-title`;
 ---
 
-<section id={id} class="section" aria-labelledby={titleId}>
+<section id={id} class="section" aria-labelledby={titleId} data-stage={sectionStages[id]}>
   {title && (
     <Heading id={titleId} class="section-title">
       {title}

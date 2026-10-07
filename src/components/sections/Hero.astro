@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import portrait from '@/assets/me.png';
 import Button from '@/components/ui/Button.astro';
+import { sectionStages } from '@/config/site';
 import { useTranslations, type Locale } from '@/i18n';
 
 interface Props {
@@ -12,7 +13,7 @@ const { locale } = Astro.props;
 const t = useTranslations(locale).hero;
 ---
 
-<section class="hero" aria-labelledby="hero-name">
+<section class="hero" aria-labelledby="hero-name" data-stage={sectionStages.hero}>
   <div class="copy">
     <p class="who" data-reveal>
       <Image
@@ -205,7 +206,7 @@ const t = useTranslations(locale).hero;
   @media (max-width: 720px) {
     .hero {
       min-height: auto;
-      padding-top: min(52svh, 400px);
+      padding-top: min(57svh, 470px);
     }
   }
 </style>

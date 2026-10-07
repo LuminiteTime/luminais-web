@@ -15,13 +15,13 @@ import {
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { hasFinePointer, prefersReducedMotion } from '@/lib/env';
 import { createBricks } from './bricks';
-import { sceneConfig as cfg, type SceneQuality } from './config';
+import { sceneConfig as cfg, stageSpan, type SceneQuality } from './config';
 import { readPalette } from './palette';
 import type { FrameState, ScenePart } from './types';
 
 export interface SceneHandle {
-  /** Page scroll progress, 0..1. */
-  setScroll(progress: number): void;
+  /** Choreography position, see `stages` in config. Fractions blend neighbouring stages. */
+  setStage(stage: number): void;
   dispose(): void;
 }
 
@@ -73,7 +73,7 @@ export async function mountScene(canvas: HTMLCanvasElement): Promise<SceneHandle
   const parts: ScenePart[] = [createBricks(rig, palette, quality)];
 
   // inputs: target values and their smoothed followers
-  const target = { scroll: 0, px: 0, py: 0 };
+  const target = { stage: 0, px: 0, py: 0 };
   const smooth = { ...target };
   const ndc = new Vector2();
   let pointerActive = false;
@@ -119,13 +119,21 @@ export async function mountScene(canvas: HTMLCanvasElement): Promise<SceneHandle
     if (!document.hidden) request();
   }
 
-  function layoutRig(scroll: number) {
-    const anchor = wide ? cfg.rig.wide : cfg.rig.narrow;
-    const settle = 1 - Math.min(scroll * 2.2, 1);
-    const { baseRotation: base, scrollRotation: sr, pointerRotation: pr } = cfg.rig;
-    rig.position.set(anchor.x * settle, anchor.y * settle, 0);
-    rig.rotation.set(base.x + pr.x * smooth.py, base.y + sr.y * scroll + pr.y * smooth.px, 0);
-    rig.scale.setScalar(anchor.scale);
+  /** Blends placement and rotation of the two stages around `stage`, plus a cursor tilt. */
+  function layoutRig(stage: number) {
+    const { from, to, local } = stageSpan(stage);
+    const t = local * local * (3 - 2 * local);
+    const a = wide ? from.wide : from.narrow;
+    const b = wide ? to.wide : to.narrow;
+    const mix = (p: number, q: number) => p + (q - p) * t;
+    const pr = cfg.pointerRotation;
+    rig.position.set(mix(a.x, b.x), mix(a.y, b.y), 0);
+    rig.rotation.set(
+      mix(from.rotation.x, to.rotation.x) + pr.x * smooth.py,
+      mix(from.rotation.y, to.rotation.y) + pr.y * smooth.px,
+      0,
+    );
+    rig.scale.setScalar(mix(a.scale, b.scale));
     rig.updateMatrixWorld();
   }
 
@@ -136,16 +144,16 @@ export async function mountScene(canvas: HTMLCanvasElement): Promise<SceneHandle
     if (animated) time += dt;
 
     const k = animated ? 1 - cfg.damping ** dt : 1;
-    smooth.scroll += (target.scroll - smooth.scroll) * k;
+    smooth.stage += (target.stage - smooth.stage) * k;
     smooth.px += (target.px - smooth.px) * k;
     smooth.py += (target.py - smooth.py) * k;
 
-    layoutRig(smooth.scroll);
-    const frame: FrameState = { time, dt, scroll: smooth.scroll, pointer: pointerInRig(), animated };
+    layoutRig(smooth.stage);
+    const frame: FrameState = { time, dt, stage: smooth.stage, pointer: pointerInRig(), animated };
     for (const part of parts) part.update(frame);
     renderer.render(scene, camera);
 
-    const settled = Math.abs(target.scroll - smooth.scroll) < 1e-4;
+    const settled = Math.abs(target.stage - smooth.stage) < 1e-4;
     if (animated || !settled) request();
   }
 
@@ -165,8 +173,8 @@ export async function mountScene(canvas: HTMLCanvasElement): Promise<SceneHandle
   resize();
 
   return {
-    setScroll(progress) {
-      target.scroll = progress;
+    setStage(stage) {
+      target.stage = stage;
       request();
     },
     dispose() {

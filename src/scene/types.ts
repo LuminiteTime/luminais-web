@@ -6,8 +6,8 @@ export interface FrameState {
   time: number;
   /** Seconds since the previous frame, clamped. */
   dt: number;
-  /** Smoothed page scroll progress, 0..1. */
-  scroll: number;
+  /** Smoothed choreography position: 0 is the first stage, 1.5 is halfway from the second to the third. */
+  stage: number;
   /** Cursor as a ray in rig space, or null when there is none. */
   pointer: { origin: Vector3; direction: Vector3 } | null;
   /** False when motion is reduced: parts snap to their targets. */
