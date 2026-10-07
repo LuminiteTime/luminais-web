@@ -8,7 +8,7 @@ export const en = {
       'Mikhail Trifonov (Luminais), software engineer at T-Bank Data Platform. Spark SQL, Airflow, Java and Python pipelines, React and TypeScript frontends.',
     jobTitle: 'Software Engineer, Data Platform',
     ogImage: '/og.jpg',
-    ogImageAlt: 'Mikhail Trifonov, software engineer. A cloud of white and green bricks about to be sorted.',
+    ogImageAlt: 'Mikhail Trifonov, software engineer. A cloud of white, graphite and green blocks about to be sorted.',
   },
   nav: {
     label: 'Sections',
@@ -56,7 +56,7 @@ export const ru: UiStrings = {
       'Михаил Трифонов (Luminais), разработчик в Т-Банке, Data Platform. Пайплайны на Spark SQL, Airflow, Java и Python, фронтенд на React и TypeScript.',
     jobTitle: 'Разработчик, Data Platform',
     ogImage: '/og-ru.jpg',
-    ogImageAlt: 'Михаил Трифонов, разработчик. Облако белых и зелёных кирпичиков перед сортировкой.',
+    ogImageAlt: 'Михаил Трифонов, разработчик. Облако белых, графитовых и зелёных блоков перед сортировкой.',
   },
   nav: {
     label: 'Разделы',

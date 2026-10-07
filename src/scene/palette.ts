@@ -7,7 +7,7 @@ export function readPalette() {
   return {
     background: color('--color-bg'),
     accent: color('--color-accent'),
-    bricks: [1, 2, 3].map((i) => color(`--scene-brick-${i}`)),
+    bricks: { 1: color('--scene-brick-1'), 2: color('--scene-brick-2'), 3: color('--scene-brick-3') },
   };
 }
 

@@ -24,9 +24,9 @@
   --surface-overlay: rgb(19 33 26 / 0.2);
 
   /* scene palette, read by src/scene/palette.ts; the accent brick uses --color-accent */
-  --scene-brick-1: #ffffff;
-  --scene-brick-2: #e3ebe6;
-  --scene-brick-3: #c4d4ca;
+  --scene-brick-1: #fbfcfb;
+  --scene-brick-2: #d5dcd8;
+  --scene-brick-3: #1f2a25;
 
   /* type: one variable family, personality comes from its axes */
   --font-sans: 'Geologica Variable', ui-sans-serif, system-ui, sans-serif;

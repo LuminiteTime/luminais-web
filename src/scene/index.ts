@@ -53,7 +53,7 @@ export async function mountScene(canvas: HTMLCanvasElement): Promise<SceneHandle
   pmrem.dispose();
 
   // soft studio light: sky fill plus one key light that casts the shadows
-  scene.add(new HemisphereLight('#ffffff', palette.bricks[2] ?? palette.background, 1.1));
+  scene.add(new HemisphereLight('#ffffff', palette.bricks[2], 1.1));
   const key = new DirectionalLight('#ffffff', 2.2);
   key.position.set(4, 9, 6);
   key.castShadow = shadows;

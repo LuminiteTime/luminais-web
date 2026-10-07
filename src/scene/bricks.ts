@@ -1,5 +1,5 @@
 import type { Group } from 'three';
-import { Euler, InstancedMesh, Matrix4, MeshPhysicalMaterial, Quaternion, Vector3 } from 'three';
+import { Euler, InstancedMesh, Matrix4, MeshStandardMaterial, Quaternion, Vector3 } from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { sceneConfig, type SceneQuality } from './config';
 import { buildLayouts, hash } from './layouts';
@@ -10,32 +10,40 @@ const { bricks: cfg, sortedAt } = sceneConfig;
 
 const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
 const smoothstep = (t: number) => t * t * (3 - 2 * t);
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const IDENTITY = new Quaternion();
 
 /**
- * Ceramic bricks that sort themselves while the page scrolls: a mixed cloud, then one column per
- * partition, then a solid table. Every brick rides a damped spring, so moves overshoot and settle,
+ * Matte blocks that sort themselves while the page scrolls: a mixed cloud of odd shapes, then one
+ * column per partition with every block normalised to one size, then a solid table. Every brick rides a damped spring, so moves overshoot and settle,
  * and the cursor can push bricks out of place.
  */
 export function createBricks(parent: Group, palette: Palette, quality: SceneQuality): ScenePart {
   const { count, segments, shadows } = cfg.quality[quality];
 
   const geometry = new RoundedBoxGeometry(cfg.size.x, cfg.size.y, cfg.size.z, segments, cfg.radius);
-  const material = new MeshPhysicalMaterial({ roughness: 0.55, clearcoat: 0.35, clearcoatRoughness: 0.35 });
+  const material = new MeshStandardMaterial(cfg.material);
   const mesh = new InstancedMesh(geometry, material, count);
   mesh.frustumCulled = false; // instances travel far from the initial bounds
   mesh.castShadow = shadows;
   mesh.receiveShadow = shadows;
   parent.add(mesh);
 
-  const colourOf = (key: number) =>
-    key === cfg.accentPartition ? palette.accent : (palette.bricks[key % palette.bricks.length] ?? palette.background);
+  const colourOf = (key: number) => {
+    const colour = cfg.colours[key] ?? 1;
+    return colour === 'accent' ? palette.accent : palette.bricks[colour];
+  };
 
   const bricks = buildLayouts(count).map((layout, i) => {
     mesh.setColorAt(i, colourOf(layout.key));
     return {
       ...layout,
       delay: hash(i * 13) * cfg.stagger,
+      raw: new Vector3(
+        lerp(cfg.rawScale.min.x, cfg.rawScale.max.x, hash(i * 5 + 1) ** 2),
+        lerp(cfg.rawScale.min.y, cfg.rawScale.max.y, hash(i * 5 + 2)),
+        lerp(cfg.rawScale.min.z, cfg.rawScale.max.z, hash(i * 5 + 3) ** 2),
+      ),
       spin: new Euler(hash(i * 3 + 11) * 6.3, hash(i * 3 + 12) * 6.3, hash(i * 3 + 13) * 6.3),
       // start above the cloud and fall in
       position: layout.chaos.clone().setY(layout.chaos.y + cfg.intro.drop + hash(i * 7) * cfg.intro.spread),
@@ -51,7 +59,8 @@ export function createBricks(parent: Group, palette: Palette, quality: SceneQual
   const push = new Vector3();
   const force = new Vector3();
   const matrix = new Matrix4();
-  const scale = new Vector3(1, 1, 1);
+  const scale = new Vector3();
+  const UNIT = new Vector3(1, 1, 1);
 
   return {
     update({ time, dt, scroll, pointer, animated }: FrameState) {
@@ -101,6 +110,7 @@ export function createBricks(parent: Group, palette: Palette, quality: SceneQual
           brick.rotation.copy(tumble);
         }
 
+        scale.copy(brick.raw).lerp(UNIT, toColumns);
         mesh.setMatrixAt(i, matrix.compose(brick.position, brick.rotation, scale));
       });
       mesh.instanceMatrix.needsUpdate = true;

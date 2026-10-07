@@ -12,17 +12,22 @@ export const sceneConfig = {
     pointerRotation: { x: 0.05, y: 0.1 },
   },
   bricks: {
-    size: { x: 0.32, y: 0.16, z: 0.32 },
+    size: { x: 0.3, y: 0.18, z: 0.3 },
     gap: 0.04,
-    radius: 0.045,
+    /** Small radius keeps edges crisp: machined parts, not soft candy. */
+    radius: 0.012,
+    /** Anodised metal finish. */
+    material: { metalness: 0, roughness: 0.82 },
+    /** Raw bricks come in mixed proportions and are normalised to one size once sorted. */
+    rawScale: { min: { x: 0.6, y: 0.6, z: 0.6 }, max: { x: 2.1, y: 1.3, z: 1.6 } },
     quality: {
-      high: { count: 380, segments: 2, shadows: true },
+      high: { count: 320, segments: 2, shadows: true },
       low: { count: 240, segments: 1, shadows: false },
     },
     /** Partition sizes as shares of all bricks. Skewed on purpose, like real data. */
     partitions: [0.16, 0.32, 0.12, 0.26, 0.14],
-    /** Index of the partition painted in the accent colour. */
-    accentPartition: 2,
+    /** Colour of each partition: a brick token number (--scene-brick-N) or the accent. */
+    colours: [1, 2, 'accent', 1, 3],
     /** Bricks per side of a partition column footprint. */
     footprint: 3,
     partitionSpacing: 1.45,
