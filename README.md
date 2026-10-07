@@ -144,6 +144,9 @@ content however long it gets.
 | `index.ts`   | Renderer, lights and shadows, camera, rig blending between stages, frame loop                  |
 | `palette.ts` | Block colours from design tokens                                                               |
 
+- Phones get their own staging: formations turn upright (`roll` in a stage's `narrow` placement), so the stream
+  runs top to bottom and the ring frames the screen, and taller gaps between sections (`--space-section`) leave
+  clear windows onto the scene.
 - All blocks are one instanced mesh: a single draw call.
 - Shaders compile with `renderer.compileAsync`, so the first frame does not block input.
 - Phones and coarse pointers get the `low` tier: fewer blocks, no shadows, lower pixel ratio.

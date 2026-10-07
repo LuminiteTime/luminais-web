@@ -131,7 +131,7 @@ export async function mountScene(canvas: HTMLCanvasElement): Promise<SceneHandle
     rig.rotation.set(
       mix(from.rotation.x, to.rotation.x) + pr.x * smooth.py,
       mix(from.rotation.y, to.rotation.y) + pr.y * smooth.px,
-      0,
+      mix(a.roll ?? 0, b.roll ?? 0),
     );
     rig.scale.setScalar(mix(a.scale, b.scale));
     rig.updateMatrixWorld();

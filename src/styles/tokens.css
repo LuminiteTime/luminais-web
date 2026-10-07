@@ -101,3 +101,10 @@
 
   color-scheme: light;
 }
+
+/* phones: tall gaps between sections are windows onto the backdrop scene */
+@media (max-width: 720px) {
+  :root {
+    --space-section: 34svh;
+  }
+}

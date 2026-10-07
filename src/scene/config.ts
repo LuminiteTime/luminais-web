@@ -6,7 +6,11 @@ interface Placement {
   x: number;
   y: number;
   scale: number;
+  /** Turn in the screen plane, radians. Portrait screens stand wide formations upright. */
+  roll?: number;
 }
+
+const UPRIGHT = Math.PI / 2;
 
 /** One step of the choreography. Page sections pick a step with `data-stage`. */
 interface Stage {
@@ -39,7 +43,7 @@ const stages: Stage[] = [
     raw: 0.6,
     rotation: { x: 0.12, y: -0.2 },
     wide: { x: 0, y: 0.2, scale: 1 },
-    narrow: { x: 0, y: 0, scale: 0.75 },
+    narrow: { x: 0, y: 0, scale: 0.82, roll: UPRIGHT },
   },
   // experience: sorted into partitions
   {
@@ -48,7 +52,7 @@ const stages: Stage[] = [
     raw: 0,
     rotation: { x: 0.28, y: -0.45 },
     wide: { x: 0, y: -0.2, scale: 1.3 },
-    narrow: { x: 0, y: 0, scale: 0.46 },
+    narrow: { x: -0.2, y: 0, scale: 0.62, roll: -UPRIGHT },
   },
   // work and stack: one curated table, close up
   {
@@ -57,7 +61,7 @@ const stages: Stage[] = [
     raw: 0,
     rotation: { x: 0.55, y: 0.75 },
     wide: { x: 0, y: 0, scale: 1.55 },
-    narrow: { x: 0, y: 0, scale: 0.9 },
+    narrow: { x: 0, y: 0, scale: 1.05, roll: UPRIGHT },
   },
   // contact: served, an orbit framing the contact card
   {
@@ -66,7 +70,7 @@ const stages: Stage[] = [
     raw: 0.8,
     rotation: { x: 0.12, y: 0 },
     wide: { x: 0, y: 0, scale: 1 },
-    narrow: { x: 0, y: 0, scale: 0.62 },
+    narrow: { x: 0, y: 0, scale: 0.62, roll: UPRIGHT },
   },
 ];
 
