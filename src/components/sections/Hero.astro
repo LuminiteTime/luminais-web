@@ -134,8 +134,10 @@ const t = useTranslations(locale).hero;
     cursor: default;
   }
 
+  /* a name never breaks inside a word, the font size is capped to fit the longest line */
   .line {
     display: block;
+    white-space: nowrap;
   }
 
   .name :global(.char) {

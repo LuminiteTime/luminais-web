@@ -39,7 +39,7 @@
   --text-xl: clamp(1.6rem, 1.2rem + 1.6vw, 2.25rem);
   --text-2xl: clamp(1.5rem, 0.6rem + 3.6vw, 3.4rem);
   --text-display: clamp(2.4rem, 1.6rem + 3.6vw, 4.5rem);
-  --text-hero: clamp(3.6rem, 1rem + 11vw, 11rem);
+  --text-hero: clamp(3.6rem, 1rem + 11vw, 9.8rem);
 
   --weight-thin: 160;
   --weight-light: 300;

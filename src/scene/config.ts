@@ -5,7 +5,7 @@ export const sceneConfig = {
   camera: { fov: 30, y: 0.5, distance: { wide: 12.5, narrow: 19 } },
   /** Rig placement in the hero; it drifts to the centre while the page scrolls. */
   rig: {
-    wide: { x: 2.7, y: 0, scale: 1 },
+    wide: { x: 3.05, y: 0, scale: 1 },
     narrow: { x: 0, y: 2.9, scale: 0.6 },
     baseRotation: { x: 0.34, y: -0.62 },
     scrollRotation: { y: 0.8 },
@@ -28,7 +28,7 @@ export const sceneConfig = {
     partitionSpacing: 1.45,
     /** Table footprint in bricks; height follows from the count. */
     table: { x: 10, z: 7 },
-    chaos: { x: 3.1, y: 2.6, z: 2.2, drift: 0.16 },
+    chaos: { x: 2.8, y: 2.6, z: 2.1, drift: 0.16 },
     spring: { stiffness: 38, damping: 8.5 },
     /** Share of the transition used to stagger bricks, 0 moves them all at once. */
     stagger: 0.45,
