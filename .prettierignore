@@ -2,3 +2,4 @@ dist
 .astro
 pnpm-lock.yaml
 public/yandex_*.html
+portfolio

@@ -16,7 +16,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "verify": "pnpm format:check && pnpm lint && pnpm check && pnpm build",
-    "icons": "node tools/generate-icons.mjs"
+    "icons": "node tools/generate-icons.mjs",
+    "portfolio": "latexmk -cd portfolio/portfolio.tex"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

@@ -1,0 +1,368 @@
+% Portfolio for hh.ru. Build: latexmk portfolio.tex (LuaLaTeX, see .latexmkrc).
+\documentclass[10pt,a4paper]{article}
+
+% -------------------- Packages --------------------
+\usepackage[left=18mm,right=18mm,top=16mm,bottom=16mm]{geometry}
+\usepackage{fontspec}
+\usepackage[russian,english]{babel}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\usepackage{ragged2e}
+
+% -------------------- Tokens (same as the site) --------------------
+\definecolor{ink}{HTML}{13211A}
+\definecolor{muted}{HTML}{59665F}
+\definecolor{accent}{HTML}{087F52}
+\definecolor{accentsoft}{HTML}{E2F2E9}
+\definecolor{line}{HTML}{D9DFDB}
+
+\setmainfont{Geologica}[
+  Path = fonts/,
+  Extension = .ttf,
+  UprightFont = *-Regular,
+  BoldFont = *-SemiBold,
+]
+\newfontfamily\display{Geologica-Display}[Path = fonts/, Extension = .ttf]
+\newfontfamily\medium{Geologica-Medium}[Path = fonts/, Extension = .ttf]
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\linespread{1.18}
+\pagestyle{empty}
+\color{ink}
+\RaggedRight
+\hypersetup{pdftitle={Михаил Трифонов, портфолио}, pdfauthor={Mikhail Trifonov}}
+
+% -------------------- Building blocks --------------------
+% Big page title of a case: \casehead{title}{one-line pitch}{role, period, team}
+\newcommand{\casehead}[3]{%
+  {\display\fontsize{30}{32}\selectfont #1\par}
+  \vspace{2pt}
+  {\large #2\par}
+  \vspace{2pt}
+  {\small\color{muted} #3\par}
+  \vspace{8pt}
+}
+
+% Small accent label above a block
+\newcommand{\blocklabel}[1]{\vspace{6pt}{\medium\small\color{accent} #1}\par\vspace{-2pt}}
+
+% One decision: bold lead sentence, then plain text
+\newcommand{\decision}[2]{\textbf{#1}\quad #2\par}
+
+% Row of three results: \results{value}{label}{value}{label}{value}{label}
+\newcommand{\result}[2]{%
+  \begin{minipage}[t]{0.31\textwidth}
+    {\display\fontsize{22}{24}\selectfont\color{accent} #1\par}
+    \vspace{2pt}
+    {\small\RaggedRight\color{muted} #2\par}
+  \end{minipage}%
+}
+\newcommand{\results}[6]{%
+  \vspace{8pt}
+  \noindent\result{#1}{#2}\hfill\result{#3}{#4}\hfill\result{#5}{#6}\par
+  \vspace{4pt}
+}
+
+% Architecture diagram styles
+\tikzset{
+  box/.style={draw=line, fill=white, rounded corners=4pt, minimum width=29mm, minimum height=11mm,
+    align=center, font=\small\medium, inner sep=3pt},
+  key/.style={box, draw=accent, fill=accentsoft},
+  flow/.style={-{Latex[length=2mm]}, draw=muted, line width=0.6pt},
+  note/.style={font=\scriptsize\color{muted}},
+}
+\newcommand{\sub}[1]{\\[-1pt]{\scriptsize\color{muted} #1}}
+
+\newcommand{\diagram}[1]{%
+  \vspace{6pt}
+  \begin{center}#1\end{center}
+  \vspace{2pt}
+}
+
+% Short project entry for the last page
+\newcommand{\project}[3]{%
+  \begin{minipage}[t]{\linewidth}
+    {\large\textbf{#1}\par}
+    {\small\color{muted} #2\par}
+    \vspace{2pt}
+    #3\par
+  \end{minipage}\par\vspace{10pt}
+}
+
+\begin{document}
+\selectlanguage{russian}
+
+% ==================== Cover ====================
+\begin{minipage}[c]{0.74\textwidth}
+  {\display\fontsize{40}{42}\selectfont Михаил Трифонов\par}
+  \vspace{6pt}
+  {\Large Бэкенд-разработчик, Java и Python\par}
+  \vspace{4pt}
+  {\color{muted} Т-Банк, Data Platform\par}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.2\textwidth}
+  \raggedleft
+  \begin{tikzpicture}
+    \clip (0,0) circle (14mm);
+    \node at (0,0) {\includegraphics[width=28mm]{me.png}};
+  \end{tikzpicture}
+\end{minipage}
+
+\vspace{14pt}
+{\small
+\href{mailto:trifonov2812@gmail.com}{trifonov2812@gmail.com}\qquad
+\href{https://t.me/LuminiteTime}{t.me/LuminiteTime}\qquad
+\href{https://github.com/LuminiteTime}{github.com/LuminiteTime}\qquad
+\href{https://luminais.tech}{luminais.tech}\par}
+
+\vspace{14pt}
+{\color{accent}\rule{\textwidth}{0.8pt}}
+\vspace{10pt}
+
+{\large
+Пишу бэкенд на Java и Spring Boot. Сейчас в Т-Банке делаю сервисы платформы данных на Kora и Python.
+До этого в Яндексе писал BFF для отзывов Auto.ru, а в Hirus делал бэкенд «Умной операционной».
+\par}
+
+{\large
+В свободное время довожу собственные продукты до продакшена. Один из них, Skillator, поработал
+три месяца с платящими пользователями, и я его продал. Здесь собраны три проекта, где архитектура
+целиком на мне, и хакатоны, на которых мы брали призы.
+\par}
+
+\vspace{14pt}
+\blocklabel{Где работал}
+\vspace{4pt}
+\begin{tabularx}{\textwidth}{@{}l X r@{}}
+  \textbf{Т-Банк}           & Data Platform, бэкенд на Java и Python  & {\color{muted}с сентября 2025} \\[3pt]
+  \textbf{Яндекс, Auto.ru}  & стажёр, бэкенд на Scala                 & {\color{muted}с января по апрель 2025} \\[3pt]
+  \textbf{Hirus}            & бэкенд «Умной операционной» на Java     & {\color{muted}с июля 2023 по август 2024} \\[3pt]
+  \textbf{Иннополис}        & бакалавриат Computer Science, GPA 4.77  & {\color{muted}выпуск в 2027} \\
+\end{tabularx}
+
+\vspace{14pt}
+\blocklabel{В этом файле}
+\vspace{4pt}
+\begin{tabularx}{\textwidth}{@{}l X r@{}}
+  \textbf{Pojec}     & платформа для найма, где кандидат чинит настоящий сервис & {\color{muted}стр. 2} \\[3pt]
+  \textbf{Skillator} & платный AI-сервис, который я сделал один и продал        & {\color{muted}стр. 3} \\[3pt]
+  \textbf{Вместе}    & закрытое приложение для семьи с ассистентом              & {\color{muted}стр. 4} \\[3pt]
+  \textbf{Хакатоны}  & MTS True Tech Hack, AdventureX, T1 и другие               & {\color{muted}стр. 5} \\
+\end{tabularx}
+
+\vfill
+{\small\color{muted} Подробнее о работе и стеке на \href{https://luminais.tech}{\color{accent}luminais.tech}\par}
+
+% ==================== Pojec ====================
+\newpage
+\casehead{Pojec}
+  {Платформа для найма, где кандидат чинит настоящий сервис.}
+  {Основатель и техлид. С января 2026. Я и два контрибьютора.}
+
+\blocklabel{Задача}
+На собеседованиях до сих пор решают алгоритмические задачки, хотя в работе важнее другое. Нужно
+разобраться в чужом коде, подключить фреймворк и ничего не сломать в проде. В Pojec кандидат получает
+сервис с багом или недоделкой, чинит его, а скрытые тесты проверяют решение в песочнице.
+
+Сложность в том, что платформа запускает чужой код. Во время найма на неё приходят всплески, и каждое
+решение нужно проверить ровно один раз.
+
+\diagram{
+\begin{tikzpicture}[node distance=6mm and 7mm]
+  \node[box] (web) {Web\sub{Next.js}};
+  \node[key, right=of web] (api) {API\sub{модульный монолит}};
+  \node[box, below=of api] (db) {PostgreSQL\sub{данные и outbox}};
+  \node[box, right=of db] (mq) {RabbitMQ\sub{очередь решений}};
+  \node[box, above=of mq, xshift=36mm] (worker) {Воркеры\sub{скрытые тесты}};
+  \node[box, right=of mq, xshift=7mm] (orch) {Оркестратор\sub{тёплый пул}};
+  \node[key, below=of orch] (box) {Песочницы gVisor\sub{Kubernetes, без сети}};
+  \draw[flow] (web) -- (api);
+  \draw[flow] (api) -- (db);
+  \draw[flow] (db) -- (mq);
+  \draw[flow] (mq) -- (worker);
+  \draw[flow] (worker) -- (orch);
+  \draw[flow] (orch) -- (box);
+  \draw[flow] (worker) -- node[note, above]{вердикт} (api);
+\end{tikzpicture}
+}
+
+\blocklabel{Решения}
+\decision{Модульный монолит.}{Начал с одного приложения на Spring Boot и одной PostgreSQL. Для команды
+из трёх человек распределённые транзакции были бы лишней болью. Границы модулей проверяют тесты на
+ArchUnit, так что любой модуль потом можно вынести в отдельный сервис.}
+
+\decision{Песочницы на gVisor.}{Код кандидата запускается в gVisor внутри Kubernetes. Выхода в сеть у
+песочницы нет, а ресурсы и время запуска жёстко ограничены.}
+
+\decision{Outbox и RabbitMQ.}{Решение и событие о нём пишутся в базу одной транзакцией, отдельный процесс
+перекладывает события в очередь. Падение воркера не теряет запуск и не проверяет его дважды. По глубине
+очереди Kubernetes добавляет песочницы.}
+
+\decision{Тёплый пул.}{Половину времени до вердикта съедал холодный старт песочницы. Теперь заранее
+держится пул готовых песочниц, его размер считается от потока решений.}
+
+\blocklabel{Как работаем}
+Работаем двухнедельными циклами в Linear. Раз в неделю провожу 1:1 с каждым контрибьютором. Изменение,
+которое затрагивает несколько модулей, сначала оформляется в ADR и проходит дизайн-ревью.
+
+\results
+  {14 с}{p95 до вердикта при 300 одновременных решениях в тесте k6}
+  {0}{потерянных запусков из 50 000, когда воркеры убивались случайно}
+  {22}{архитектурных решения записаны в ADR}
+
+{\small\color{muted} Java 25, Spring Boot, PostgreSQL, RabbitMQ, Kubernetes, gVisor, Next.js, k6\par}
+
+% ==================== Skillator ====================
+\newpage
+\casehead{Skillator}
+  {Платный AI-сервис, который я сделал один и продал.}
+  {Основатель и единственный инженер. С июня по сентябрь 2026.}
+
+\blocklabel{Задача}
+Skillator по описанию задачи пишет скилл для кодовых агентов вроде Claude Code. Генерация платная,
+пользователь покупает кредиты через ЮKassa. Я сделал его сам, от интервью с первыми пользователями
+до деплоя, три месяца держал в продакшене и потом продал.
+
+Главная трудность в том, что в одном потоке оказались реальные деньги и недетерминированная модель.
+Списание должно быть верным всегда, а ответ должен стоить своих денег.
+
+\diagram{
+\begin{tikzpicture}[node distance=6mm and 8mm]
+  \node[box] (web) {Web\sub{React, Vite}};
+  \node[box, right=of web] (edge) {nginx\sub{TLS, лимиты}};
+  \node[key, right=of edge] (api) {API\sub{Spring Boot}};
+  \node[key, right=of api] (llm) {LLM\sub{OpenRouter, evals}};
+  \node[box, below=of edge] (pay) {ЮKassa\sub{вебхуки}};
+  \node[box, below=of api] (db) {PostgreSQL\sub{журнал кредитов}};
+  \node[box, below=of llm] (obs) {Grafana\sub{метрики, логи, трейсы}};
+  \draw[flow] (web) -- (edge);
+  \draw[flow] (edge) -- (api);
+  \draw[flow] (api) -- (llm);
+  \draw[flow] (pay) -- (api);
+  \draw[flow] (api) -- (db);
+  \draw[flow] (api) -- (obs);
+\end{tikzpicture}
+}
+
+\blocklabel{Решения}
+\decision{Кредиты как журнал.}{Баланс нигде не хранится числом, которое можно поправить. Каждое
+пополнение и каждая генерация пишутся отдельной неизменяемой записью, а баланс считается из них.
+Вебхуки ЮKassa идемпотентны по id платежа, так что повторное уведомление не начислит кредиты второй раз.}
+
+\decision{Evals перед релизом.}{Любое изменение промпта или модели прогоняется по эталонному набору
+запросов. Ответы оценивает LLM-судья по рубрике, и если оценка упала, релиз не выходит.}
+
+\decision{Провайдеры за интерфейсами.}{Модель и платёжка переключаются со страницы администратора. Когда
+у провайдера модели был сбой, я переключил его за минуту без деплоя.}
+
+\decision{Мониторинг с первого дня.}{Метрики шли в Prometheus, логи в Loki, трейсы в Tempo. Алерты о
+проблемах с оплатой приходили мне в Telegram.}
+
+\decision{Передача покупателю.}{К продаже подготовил ранбуки, ADR и всю инфраструктуру в коде. Через неделю
+команда покупателя сама выпускала релизы.}
+
+\results
+  {2 300}{пользователей, из них 310 платящих}
+  {99,9\%}{аптайм за три месяца в продакшене}
+  {16}{архитектурных решений записаны в ADR}
+
+{\small\color{muted} Java 25, Spring Boot, PostgreSQL, React, ЮKassa, Docker, Prometheus, Grafana, Loki, Tempo\par}
+
+% ==================== Vmeste ====================
+\newpage
+\casehead{Вместе}
+  {Закрытое приложение для семьи с ассистентом.}
+  {Автор, бэкенд и Android. С августа 2026.}
+
+\blocklabel{Задача}
+В приложении есть общий чат, документы, календарь и ассистент. Ассистент отвечает на вопросы по данным
+самой семьи, например где лежит полис или когда у бабушки день рождения.
+
+На одном сервере живут несколько семей. Главное требование в том, чтобы они никогда не видели данные
+друг друга, и ассистент тоже.
+
+\diagram{
+\begin{tikzpicture}[node distance=6mm and 8mm]
+  \node[box] (app) {Android\sub{Compose, офлайн-кэш}};
+  \node[box, right=of app] (edge) {Caddy\sub{TLS}};
+  \node[key, right=of edge] (api) {Бэкенд\sub{7 доменных модулей}};
+  \node[box, right=of api] (llm) {OpenRouter\sub{ассистент, стриминг}};
+  \node[box, below=of edge] (files) {MinIO\sub{временные ссылки}};
+  \node[key, below=of api] (db) {PostgreSQL\sub{id семьи в запросе}};
+  \node[box, below=of llm] (obs) {Grafana\sub{метрики и алерты}};
+  \draw[flow] (app) -- (edge);
+  \draw[flow] (edge) -- (api);
+  \draw[flow] (api) -- (llm);
+  \draw[flow] (app) -- (files);
+  \draw[flow] (api) -- (db);
+  \draw[flow] (api) -- (obs);
+\end{tikzpicture}
+}
+
+\blocklabel{Решения}
+\decision{Изоляция в репозиториях.}{Id семьи берётся только из токена и подставляется в каждый запрос на
+уровне репозитория. Выбрать чужую семью через тело запроса нельзя в принципе.}
+
+\decision{Файлы мимо бэкенда.}{Приложение получает временную ссылку и грузит файл прямо в MinIO.
+Бэкенд большие файлы через себя не гоняет.}
+
+\decision{Смена поиска.}{Сначала ассистент искал по pgvector. Потом оказалось, что у провайдера модели нет
+эмбеддингов, и я перешёл на лексический поиск. Почему и при каком условии вернуться, записано в ADR.}
+
+\decision{Офлайн на Android.}{Клиент на Kotlin и Compose читает из локального кэша. Отправленные сообщения
+ждут сети в очереди и уходят сами.}
+
+\decision{Релизы.}{Релиз запускается вручную в GitHub Actions. Галочками выбирается, что выкатывать, APK,
+сервер или мониторинг.}
+
+\results
+  {7}{доменных модулей, границы проверяет компилятор}
+  {11}{архитектурных решений записаны в ADR}
+  {300 мс}{бюджет p95 на REST-запрос}
+
+{\small\color{muted} Java 25, Spring Boot 4, Spring Data JDBC, PostgreSQL, MinIO, Kotlin, Jetpack Compose, Caddy\par}
+
+% ==================== Hackathons ====================
+\newpage
+\casehead{Хакатоны и учебные проекты}
+  {Короткие проекты, где я отвечал за бэкенд.}
+  {2025 и 2026 годы}
+
+\project{MTS True Tech Hack, лучшее решение в треке MWS Tables}{Апрель 2026. React, TypeScript, Java, Spring, Node.js, PostgreSQL}
+{Сделали редактор документов в духе Confluence, в который встраиваются живые таблицы MWS Tables. Я писал
+бэкенд метаданных на Java и интеграцию с таблицами. Чтобы сервис совместного редактирования на Node.js не
+зависел от Java-бэкенда, связал их через очередь событий в PostgreSQL.}
+
+\project{AdventureX, Ханчжоу}{Июль 2026. React Native, Expo, TypeScript, Go, vLLM}
+{Самый большой хакатон Китая, больше 800 участников. За пять дней вчетвером сделали The Sleepy Knight,
+пиксельного тамагочи, который живёт, только если ты спишь по режиму. Я написал Go-сервис для AI-оракула
+игры и сделал часть экранов на React Native.}
+
+\project{T1 Hackathon, PingTower}{Сентябрь 2025. Java 21, Spring Boot, ClickHouse, Python}
+{Мониторинг доступности сайтов и API с алертами и отчётами по SLA. Я был лидом бэкенда и разделил систему
+на два сервиса. Проверки и аналитика живут на Java с ClickHouse, уведомления отправляет сервис на Python.}
+
+\project{Techarena Kazan, 2 место}{Июнь 2025. C++}
+{Алгоритм распределения сетевого потока между узлами с ограничениями по пропускной способности и цене.
+Я отвечал за проверку гипотез и краевые случаи.}
+
+\project{Open Labs Share}{Лето 2025. Spring Cloud, gRPC, FastAPI, PostgreSQL}
+{Учебный проект на семь человек, я вёл бэкенд. Делил задачи между тремя бэкенд-разработчиками, проводил
+дизайн-ревью и сам написал авторизацию и gateway.}
+
+\project{Компилятор языка I}{Весна 2025. Java, JavaCC, WebAssembly}
+{Компилятор своего императивного языка в WebAssembly. Парсер сделан на JavaCC, семантический анализ и
+генерация кода написаны вручную, программы запускаются через wasmtime.}
+
+\vfill
+{\small\color{muted} Код этих проектов на \href{https://github.com/LuminiteTime}{\color{accent}github.com/LuminiteTime}.
+Связаться удобнее всего в Telegram, \href{https://t.me/LuminiteTime}{\color{accent}t.me/LuminiteTime}.\par}
+
+\end{document}
