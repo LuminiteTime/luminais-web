@@ -204,58 +204,58 @@ export const experience: Position[] = [
     l10n: {
       en: {
         org: 'Hirus',
-        role: 'Fullstack Developer',
+        role: 'Backend Developer, Java',
         summary:
-          'Software for private clinics: scheduling, patient records, billing. Spring backend and a React admin.',
-        impact: ['Owned the scheduling module', 'Database load down 68%'],
+          'Backend for HiRUS Smart Operating Room: video and device data from the operating theatre in one system.',
+        impact: ['Operation archive and doctor portal', 'Database load down 68%'],
         points: [
           {
+            facet: 'architecture',
+            text: 'REST API on Spring Boot for the operation archive, the doctor portal and the surgical media library.',
+          },
+          {
+            facet: 'architecture',
+            text: 'Metadata in PostgreSQL, photo and video in object storage served by presigned links, past the backend.',
+          },
+          {
             facet: 'requirements',
-            text: 'Owned appointment scheduling: interviews with clinic admins, the spec, acceptance criteria, release.',
-          },
-          {
-            facet: 'architecture',
-            text: 'BFF for the admin app over scheduling, records and billing: each screen gets one response shaped for it.',
-          },
-          {
-            facet: 'architecture',
-            text: 'Double booking blocked in the database with PostgreSQL exclusion constraints.',
+            text: 'Role-based access to medical data for doctors, clinic admins and consultants, with an audit log of archive views.',
           },
           {
             facet: 'delivery',
-            text: 'Rewrote the heaviest JDBC queries and added indexes: database load down 68%. Admin screens in React and TypeScript.',
+            text: 'API for remote case conferences from the telemedicine stand. Rewrote the heaviest JDBC queries: database load down 68%.',
           },
           {
-            facet: 'operations',
-            text: 'GitLab CI with linters, tests and one-click deploys; production support during clinic hours.',
+            facet: 'quality',
+            text: 'GitLab CI with linters, tests and deploys; JUnit, Mockito and Testcontainers across services and controllers.',
           },
         ],
       },
       ru: {
         org: 'Hirus',
-        role: 'Fullstack-разработчик',
-        summary: 'Софт для частных клиник: запись, медкарты, оплата. Бэкенд на Spring и админка на React.',
-        impact: ['Вёл модуль записи', 'Нагрузка на базу ниже на 68%'],
+        role: 'Бэкенд-разработчик, Java',
+        summary: 'Бэкенд «Умной операционной» HiRUS: видео и данные медоборудования операционной в одной системе.',
+        impact: ['Архив операций и кабинет врача', 'Нагрузка на базу ниже на 68%'],
         points: [
           {
+            facet: 'architecture',
+            text: 'REST API на Spring Boot для архива операций, личного кабинета врача и медиатеки хирургических вмешательств.',
+          },
+          {
+            facet: 'architecture',
+            text: 'Метаданные в PostgreSQL, фото и видео в объектном хранилище, отдаются по временным ссылкам в обход бэкенда.',
+          },
+          {
             facet: 'requirements',
-            text: 'Вёл модуль записи на приём: интервью с администраторами клиник, спецификация, критерии приёмки, релиз.',
-          },
-          {
-            facet: 'architecture',
-            text: 'BFF для админки поверх записи, медкарт и оплаты: каждый экран получает один ответ под себя.',
-          },
-          {
-            facet: 'architecture',
-            text: 'Двойная запись запрещена на уровне базы через exclusion constraints в PostgreSQL.',
+            text: 'Ролевой доступ к медицинским данным для врачей, администраторов и консультантов, журнал просмотров архива.',
           },
           {
             facet: 'delivery',
-            text: 'Переписал самые тяжёлые JDBC-запросы и добавил индексы: нагрузка на базу ниже на 68%. Экраны админки на React и TypeScript.',
+            text: 'API онлайн-консилиумов с телемедицинской стойки. Переписал тяжёлые JDBC-запросы: нагрузка на базу ниже на 68%.',
           },
           {
-            facet: 'operations',
-            text: 'GitLab CI с линтерами, тестами и деплоем в один клик, поддержка продакшена в часы работы клиник.',
+            facet: 'quality',
+            text: 'GitLab CI с линтерами, тестами и деплоем; JUnit, Mockito и Testcontainers для сервисов и контроллеров.',
           },
         ],
       },
