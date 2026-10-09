@@ -8,7 +8,7 @@ interface Point {
   text: string;
 }
 
-/** Timeline entry. Dates are `YYYY-MM` or `YYYY`; omit `end` for the current role. */
+/** Timeline entry. Dates are `YYYY-MM` or `YYYY`; omit `end` for the current role. Keep points to one or two lines. */
 export interface Position {
   id: string;
   start: string;
@@ -31,114 +31,104 @@ export const experience: Position[] = [
       en: {
         org: 'T-Bank',
         role: 'Software Engineer, Data Platform',
-        summary:
-          'Ingestion, orchestration and services around the bank’s Data Lake House. I own one service end to end and the ingestion of three source systems.',
+        summary: 'Ingestion, orchestration and services around the bank’s Data Lake House.',
         impact: [
           'Nightly batch 3× faster',
-          '30+ pipelines migrated with no downtime',
-          'Incidents resolved in under 40 min',
+          '30+ pipelines moved with zero downtime',
+          'Incidents closed in under 40 min',
         ],
         points: [
           {
             facet: 'architecture',
-            text: 'Wrote the design doc for a new Java/Kora data service: peak load estimate of about 1,200 rps and 2 TB a day through Arrow Flight, failure modes, storage and API choices. Defended it at the platform architecture review, then built it.',
+            text: 'Design doc for a new Java/Kora service: about 1,200 rps and 2 TB a day at peak. Passed the architecture review, then built it.',
           },
           {
             facet: 'architecture',
-            text: 'Designed the ingestion events on Kafka: topics keyed by dataset to keep order, idempotent consumers with a dedup table, retries with backoff and a dead-letter topic replayed from a runbook. A broker failover no longer drops or doubles a load.',
+            text: 'Kafka ingestion with idempotent consumers, retries with backoff and a dead-letter topic. Broker failovers stopped dropping or duplicating loads.',
           },
           {
             facet: 'requirements',
-            text: 'Interviewed analysts and ML teams to turn “we need fresher data” into a spec: a freshness SLO per dataset, access groups and retention. The spec became the backlog for two quarters.',
+            text: 'Turned interviews with analysts and ML teams into a spec: freshness SLO per dataset, access groups, retention.',
           },
           {
             facet: 'team',
-            text: 'Agreed contracts and a rollout plan with two adjacent teams and the DLH team, then moved 30+ consumer pipelines to the new service without downtime.',
+            text: 'Agreed contracts with two adjacent teams and the DLH team; moved 30+ consumer pipelines with zero downtime.',
+          },
+          {
+            facet: 'team',
+            text: 'Onboarded two engineers: an onboarding guide, pairing on first tasks, code review.',
           },
           {
             facet: 'quality',
-            text: 'Built the test strategy together with our QA engineer: contract tests generated from OpenAPI, Testcontainers for PostgreSQL and Kafka, and a nightly data quality suite in Airflow.',
+            text: 'Test strategy with our QA engineer: contract tests from OpenAPI, Testcontainers for PostgreSQL and Kafka, nightly data checks.',
           },
           {
             facet: 'operations',
-            text: 'On-call in the platform rotation. Introduced SLOs with burn-rate alerts, OpenTelemetry tracing across services and blameless postmortems; median time to resolve went from hours to under 40 minutes.',
+            text: 'On-call rotation, SLOs with burn-rate alerts, OpenTelemetry tracing, postmortems. Median time to resolve fell below 40 minutes.',
           },
           {
             facet: 'operations',
-            text: 'Run our services on Kubernetes: Helm charts, readiness and liveness probes, autoscaling on consumer lag, PodDisruptionBudgets, Prometheus metrics and a Grafana dashboard per service.',
+            text: 'Kubernetes: Helm charts, probes, autoscaling on consumer lag, a Grafana dashboard for every service.',
           },
           {
             facet: 'delivery',
-            text: 'Tuned the heaviest Spark SQL marts (partition pruning, broadcast joins, skew hints under AQE): the nightly window went from 5 h to 1 h 40 min. Moved 60+ DAGs onto a shared Airflow operator library.',
-          },
-          {
-            facet: 'delivery',
-            text: 'Moved file-processing workers from a fixed thread pool to virtual threads with a concurrency limit per source, so one slow upstream no longer starves the others. Throughput tripled on the same pods.',
+            text: 'Spark SQL tuning cut the nightly window from 5 h to 1 h 40 min. Workers on virtual threads tripled throughput on the same pods.',
           },
           {
             facet: 'ai',
-            text: 'Built an MCP server over Airflow and DLH metadata and a set of shared agent skills, so the team’s coding agents can answer “why is this table stale” and draft a fix with the right lineage in context.',
-          },
-          {
-            facet: 'team',
-            text: 'Onboarded two new engineers: wrote the onboarding guide, paired on their first tasks and reviewed their code until they shipped on their own.',
+            text: 'MCP server over Airflow and DLH metadata, plus shared agent skills, so coding agents see lineage and run history.',
           },
         ],
       },
       ru: {
         org: 'Т-Банк',
         role: 'Разработчик, Data Platform',
-        summary:
-          'Загрузка данных, оркестрация и сервисы вокруг Data Lake House банка. Целиком веду один сервис и загрузку из трёх систем-источников.',
+        summary: 'Загрузка данных, оркестрация и сервисы вокруг Data Lake House банка.',
         impact: [
           'Ночной батч в 3 раза быстрее',
           '30+ пайплайнов переехали без простоя',
-          'Инциденты закрываются быстрее 40 мин',
+          'Инциденты закрываются за 40 мин',
         ],
         points: [
           {
             facet: 'architecture',
-            text: 'Написал design doc нового сервиса данных на Java/Kora: оценка пиковой нагрузки около 1 200 rps и 2 ТБ в сутки через Arrow Flight, сценарии отказов, выбор хранилища и API. Защитил его на архитектурном ревью платформы и реализовал.',
+            text: 'Design doc нового сервиса на Java/Kora: около 1 200 rps и 2 ТБ в сутки в пике. Прошёл архитектурное ревью и реализовал.',
           },
           {
             facet: 'architecture',
-            text: 'Спроектировал события загрузки на Kafka: ключ топика по датасету ради порядка, идемпотентные консьюмеры с таблицей дедупликации, ретраи с backoff и dead-letter топик, который переигрывается по ранбуку. Переключение брокера больше не теряет и не дублирует загрузки.',
+            text: 'Загрузка через Kafka: идемпотентные консьюмеры, ретраи с backoff, dead-letter топик. Переключение брокера больше не теряет и не дублирует загрузки.',
           },
           {
             facet: 'requirements',
-            text: 'Провёл интервью с аналитиками и ML-командами и превратил «нам нужны данные посвежее» в спецификацию: SLO свежести на каждый датасет, группы доступа, сроки хранения. Спецификация стала бэклогом на два квартала.',
+            text: 'Собрал требования у аналитиков и ML-команд в спецификацию: SLO свежести на датасет, группы доступа, сроки хранения.',
           },
           {
             facet: 'team',
-            text: 'Согласовал контракты и план раскатки с двумя смежными командами и командой DLH, перевёл 30+ пайплайнов-потребителей на новый сервис без простоя.',
+            text: 'Согласовал контракты с двумя смежными командами и командой DLH, перевёл 30+ пайплайнов без простоя.',
+          },
+          {
+            facet: 'team',
+            text: 'Онбордил двух инженеров: гайд для новичков, парная работа на первых задачах, код-ревью.',
           },
           {
             facet: 'quality',
-            text: 'Вместе с QA-инженером выстроил стратегию тестирования: контрактные тесты из OpenAPI, Testcontainers для PostgreSQL и Kafka, ночной набор проверок качества данных в Airflow.',
+            text: 'Стратегия тестирования вместе с QA: контрактные тесты из OpenAPI, Testcontainers для PostgreSQL и Kafka, ночные проверки данных.',
           },
           {
             facet: 'operations',
-            text: 'Дежурю в ротации платформы. Ввёл SLO с алертами по burn rate, сквозной трейсинг на OpenTelemetry и разборы инцидентов без поиска виноватых; медианное время устранения сократилось с часов до 40 минут.',
+            text: 'Дежурства, SLO с алертами по burn rate, трейсинг на OpenTelemetry, разборы инцидентов. Медианное время устранения меньше 40 минут.',
           },
           {
             facet: 'operations',
-            text: 'Наши сервисы живут в Kubernetes: Helm-чарты, readiness и liveness пробы, автоскейлинг по лагу консьюмеров, PodDisruptionBudget, метрики в Prometheus и дашборд в Grafana на каждый сервис.',
+            text: 'Kubernetes: Helm-чарты, пробы, автоскейлинг по лагу консьюмеров, дашборд в Grafana на каждый сервис.',
           },
           {
             facet: 'delivery',
-            text: 'Оптимизировал самые тяжёлые витрины на Spark SQL (partition pruning, broadcast join, skew-хинты под AQE): ночное окно сократилось с 5 ч до 1 ч 40 мин. Перевёл 60+ DAG на общую библиотеку операторов Airflow.',
-          },
-          {
-            facet: 'delivery',
-            text: 'Перевёл воркеры обработки файлов с фиксированного пула потоков на виртуальные потоки с лимитом параллелизма на источник, чтобы один медленный источник не душил остальные. Пропускная способность выросла втрое на тех же подах.',
+            text: 'Тюнинг Spark SQL сократил ночное окно с 5 ч до 1 ч 40 мин. Воркеры на виртуальных потоках утроили пропускную способность на тех же подах.',
           },
           {
             facet: 'ai',
-            text: 'Сделал MCP-сервер над метаданными Airflow и DLH и набор общих скиллов для агентов, чтобы кодовые агенты команды отвечали на «почему эта таблица устарела» и предлагали фикс, видя нужный lineage.',
-          },
-          {
-            facet: 'team',
-            text: 'Онбордил двух новых инженеров: написал гайд для новичков, работал в паре на первых задачах и ревьюил код, пока они не начали выпускать задачи сами.',
+            text: 'MCP-сервер над метаданными Airflow и DLH и общие скиллы, чтобы кодовые агенты видели lineage и историю запусков.',
           },
         ],
       },
@@ -152,40 +142,56 @@ export const experience: Position[] = [
       en: {
         org: 'Yandex, Auto.ru',
         role: 'Backend Developer, Scala',
-        summary: 'Microservices behind reviews and user content on Auto.ru.',
-        impact: ['Hedged calls 75% faster at p99', 'One GraphQL query instead of four REST calls'],
+        summary: 'Backend for frontend behind reviews and user content on Auto.ru, web and mobile.',
+        impact: ['p99 of hedged calls down 75%', 'One query per page instead of four'],
         points: [
           {
+            facet: 'architecture',
+            text: 'GraphQL schema for the reviews BFF: a page loads in one query instead of four REST calls.',
+          },
+          {
             facet: 'delivery',
-            text: 'Reworked the in-house gRPC client and server so request hedging cancels the losing call. Hedged calls became 75% faster at p99 while backend load stayed flat.',
+            text: 'Fixed request hedging in our gRPC client and server: the losing call is cancelled, p99 down 75%.',
+          },
+          {
+            facet: 'operations',
+            text: 'Timeouts, retry budgets and fallbacks per downstream. When the ratings service is slow, only its block disappears.',
           },
           {
             facet: 'quality',
-            text: 'Checked the change under load at three times peak traffic, then rolled it out behind a feature flag service by service.',
+            text: 'Load tests at three times peak traffic, then rollout behind feature flags one service at a time.',
           },
           {
-            facet: 'architecture',
-            text: 'Designed GraphQL schemas for reviews and user content with the web team, replacing four REST round trips per page with one query.',
+            facet: 'team',
+            text: 'Agreed field-level contracts with the web and mobile teams and retired the old REST endpoints over two releases.',
           },
         ],
       },
       ru: {
         org: 'Яндекс, Авто.ру',
         role: 'Бэкенд-разработчик, Scala',
-        summary: 'Микросервисы отзывов и пользовательского контента Авто.ру.',
-        impact: ['Хеджированные вызовы на 75% быстрее по p99', 'Один GraphQL-запрос вместо четырёх REST'],
+        summary: 'BFF для отзывов и пользовательского контента Авто.ру, веб и мобильные приложения.',
+        impact: ['p99 хеджированных вызовов ниже на 75%', 'Один запрос на страницу вместо четырёх'],
         points: [
           {
+            facet: 'architecture',
+            text: 'GraphQL-схема BFF отзывов: страница грузится одним запросом вместо четырёх REST-вызовов.',
+          },
+          {
             facet: 'delivery',
-            text: 'Переделал внутренний gRPC клиент и сервер, чтобы при хеджировании проигравший запрос отменялся. Хеджированные вызовы стали на 75% быстрее по p99, нагрузка на бэкенды не выросла.',
+            text: 'Починил хеджирование в нашем gRPC клиенте и сервере: проигравший запрос отменяется, p99 ниже на 75%.',
+          },
+          {
+            facet: 'operations',
+            text: 'Таймауты, бюджет ретраев и фолбэки на каждый нижестоящий сервис. Когда тормозит сервис рейтингов, пропадает только его блок.',
           },
           {
             facet: 'quality',
-            text: 'Проверил изменение под нагрузкой в три раза выше пиковой и раскатывал за фича-флагом, сервис за сервисом.',
+            text: 'Нагрузочные тесты на тройном пике и раскатка за фича-флагами, сервис за сервисом.',
           },
           {
-            facet: 'architecture',
-            text: 'Спроектировал GraphQL-схемы отзывов и пользовательского контента вместе с веб-командой: вместо четырёх REST-запросов на страницу один запрос.',
+            facet: 'team',
+            text: 'Согласовал контракты полей с веб- и мобильной командами и вывел старые REST-эндпоинты за два релиза.',
           },
         ],
       },
@@ -200,57 +206,56 @@ export const experience: Position[] = [
         org: 'Hirus',
         role: 'Fullstack Developer',
         summary:
-          'Software for private clinics: scheduling, patient records, billing. Spring backend and the React admin the staff works in.',
+          'Software for private clinics: scheduling, patient records, billing. Spring backend and a React admin.',
         impact: ['Owned the scheduling module', 'Database load down 68%'],
         points: [
           {
             facet: 'requirements',
-            text: 'Owned appointment scheduling from requirements to production: sat with clinic administrators, mapped their week, wrote the spec and acceptance criteria.',
+            text: 'Owned appointment scheduling: interviews with clinic admins, the spec, acceptance criteria, release.',
           },
           {
             facet: 'architecture',
-            text: 'Designed the slot model so double booking is impossible at the database level: PostgreSQL exclusion constraints instead of application locks.',
+            text: 'BFF for the admin app over scheduling, records and billing: each screen gets one response shaped for it.',
+          },
+          {
+            facet: 'architecture',
+            text: 'Double booking blocked in the database with PostgreSQL exclusion constraints.',
           },
           {
             facet: 'delivery',
-            text: 'Rewrote the heaviest JDBC queries and added the missing indexes: database load down 68%. Built the admin screens in React and TypeScript on top of the same API.',
+            text: 'Rewrote the heaviest JDBC queries and added indexes: database load down 68%. Admin screens in React and TypeScript.',
           },
           {
             facet: 'operations',
-            text: 'Moved builds to GitLab CI with linters, tests and one-click deploys; handled production support during clinic hours.',
-          },
-          {
-            facet: 'quality',
-            text: 'Covered services and controllers with JUnit and Testcontainers, following the testing pyramid.',
+            text: 'GitLab CI with linters, tests and one-click deploys; production support during clinic hours.',
           },
         ],
       },
       ru: {
         org: 'Hirus',
         role: 'Fullstack-разработчик',
-        summary:
-          'Софт для частных клиник: запись, медкарты, оплата. Бэкенд на Spring и админка на React, в которой работает персонал.',
-        impact: ['Вёл модуль записи целиком', 'Нагрузка на базу ниже на 68%'],
+        summary: 'Софт для частных клиник: запись, медкарты, оплата. Бэкенд на Spring и админка на React.',
+        impact: ['Вёл модуль записи', 'Нагрузка на базу ниже на 68%'],
         points: [
           {
             facet: 'requirements',
-            text: 'Вёл модуль записи на приём от требований до продакшена: сидел с администраторами клиник, разобрал их рабочую неделю, написал спецификацию и критерии приёмки.',
+            text: 'Вёл модуль записи на приём: интервью с администраторами клиник, спецификация, критерии приёмки, релиз.',
           },
           {
             facet: 'architecture',
-            text: 'Спроектировал модель слотов так, что двойная запись невозможна на уровне базы: exclusion constraints в PostgreSQL вместо блокировок в приложении.',
+            text: 'BFF для админки поверх записи, медкарт и оплаты: каждый экран получает один ответ под себя.',
+          },
+          {
+            facet: 'architecture',
+            text: 'Двойная запись запрещена на уровне базы через exclusion constraints в PostgreSQL.',
           },
           {
             facet: 'delivery',
-            text: 'Переписал самые тяжёлые JDBC-запросы и добавил недостающие индексы: нагрузка на базу снизилась на 68%. Собирал экраны админки на React и TypeScript поверх того же API.',
+            text: 'Переписал самые тяжёлые JDBC-запросы и добавил индексы: нагрузка на базу ниже на 68%. Экраны админки на React и TypeScript.',
           },
           {
             facet: 'operations',
-            text: 'Перевёл сборку в GitLab CI с линтерами, тестами и деплоем в один клик; поддерживал продакшен в часы работы клиник.',
-          },
-          {
-            facet: 'quality',
-            text: 'Покрывал сервисы и контроллеры тестами на JUnit и Testcontainers по пирамиде тестирования.',
+            text: 'GitLab CI с линтерами, тестами и деплоем в один клик, поддержка продакшена в часы работы клиник.',
           },
         ],
       },
@@ -265,28 +270,22 @@ export const experience: Position[] = [
         org: 'Ragnar',
         role: 'Python Developer',
         summary: 'AI assistant that answers from company documents.',
-        impact: ['RAG answers grounded in uploaded files'],
+        impact: [],
         points: [
-          { facet: 'delivery', text: 'FastAPI endpoints for model calls with proper error handling and timeouts.' },
-          {
-            facet: 'quality',
-            text: 'Tuned RAG retrieval on a set of real questions until answers cited the right documents.',
-          },
+          { facet: 'delivery', text: 'FastAPI endpoints for model calls with error handling and timeouts.' },
+          { facet: 'ai', text: 'Tuned RAG retrieval on real questions until answers cited the right documents.' },
         ],
       },
       ru: {
         org: 'Ragnar',
         role: 'Python-разработчик',
         summary: 'AI-ассистент, который отвечает по документам компании.',
-        impact: ['Ответы RAG опираются на загруженные файлы'],
+        impact: [],
         points: [
+          { facet: 'delivery', text: 'Эндпоинты FastAPI для вызовов модели с обработкой ошибок и таймаутами.' },
           {
-            facet: 'delivery',
-            text: 'Эндпоинты FastAPI для вызовов модели с аккуратной обработкой ошибок и таймаутами.',
-          },
-          {
-            facet: 'quality',
-            text: 'Настраивал поиск в RAG на наборе реальных вопросов, пока ответы не стали ссылаться на нужные документы.',
+            facet: 'ai',
+            text: 'Настраивал поиск в RAG на реальных вопросах, пока ответы не начали ссылаться на нужные документы.',
           },
         ],
       },
@@ -300,15 +299,14 @@ export const experience: Position[] = [
       en: {
         org: 'Innopolis University',
         role: 'B.Sc. Computer Science',
-        summary: 'GPA 4.77 out of 5. Thesis on sizing JDBC connection pools under Java virtual threads.',
+        summary: 'GPA 4.77 out of 5.',
         impact: [],
         points: [],
       },
       ru: {
         org: 'Университет Иннополис',
         role: 'Бакалавриат, Computer Science',
-        summary:
-          'Средний балл 4.77 из 5. Диплом о подборе размера пула JDBC-соединений под виртуальными потоками Java.',
+        summary: 'Средний балл 4.77 из 5.',
         impact: [],
         points: [],
       },

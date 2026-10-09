@@ -11,6 +11,11 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale).work;
+
+// Regular tiles sit three to a row; an unfinished last row stretches to fill the width.
+const regular = projects.filter((p) => !p.featured).map((p) => p.id);
+const leftover = regular.length % 3;
+const stretched = new Map(regular.slice(regular.length - leftover).map((id) => [id, leftover === 1 ? 'full' : 'half']));
 ---
 
 <Section id="work" title={t.title}>
@@ -18,7 +23,7 @@ const t = useTranslations(locale).work;
     {projects.map(({ id, featured, href, stack, l10n }) => {
       const p = l10n[locale];
       return (
-        <li class:list={['tile glass', { featured }]}>
+        <li class:list={['tile glass', { featured }, stretched.get(id)]}>
           <p class="context">{p.context}</p>
           <h3>
             {href ? (
@@ -71,8 +76,16 @@ const t = useTranslations(locale).work;
       box-shadow var(--duration-base);
   }
 
-  .featured {
+  .featured,
+  .half {
     grid-column: span 3;
+  }
+
+  .full {
+    grid-column: 1 / -1;
+  }
+
+  .featured {
     padding: var(--space-6);
   }
 
@@ -145,6 +158,15 @@ const t = useTranslations(locale).work;
 
   @media (max-width: 960px) {
     .tile,
+    .featured,
+    .half {
+      grid-column: span 3;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
     .featured {
       grid-column: span 3;
     }
@@ -152,6 +174,15 @@ const t = useTranslations(locale).work;
 
   @media (max-width: 720px) {
     .tile,
+    .featured,
+    .half {
+      grid-column: span 3;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
     .featured {
       grid-column: 1 / -1;
       padding: 22px;

@@ -1,6 +1,6 @@
 import type { Localized } from '@/i18n';
 
-/** Current role impact, shown in the "Now" section. Strongest first. */
+/** Current role impact, shown in the "Now" section. Strongest first, two short lines each. */
 export interface Highlight {
   id: string;
   l10n: Localized<{ title: string; text: string }>;
@@ -11,12 +11,12 @@ export const highlights: Highlight[] = [
     id: 'kora-service',
     l10n: {
       en: {
-        title: 'A data service from design doc to production',
-        text: 'Load estimate, failure modes and API in a design doc defended at the architecture review, then a Java/Kora service on Kafka, Iceberg and Arrow Flight that 30+ pipelines moved to without downtime.',
+        title: 'New data service',
+        text: 'Design doc, architecture review, then a Java/Kora service on Kafka, Iceberg and Arrow Flight. 30+ pipelines moved to it with zero downtime.',
       },
       ru: {
-        title: 'Сервис данных от design doc до продакшена',
-        text: 'Оценка нагрузки, сценарии отказов и API в design doc, защищённом на архитектурном ревью, а затем сервис на Java/Kora поверх Kafka, Iceberg и Arrow Flight, на который без простоя переехали 30+ пайплайнов.',
+        title: 'Новый сервис данных',
+        text: 'Design doc, архитектурное ревью и сервис на Java/Kora поверх Kafka, Iceberg и Arrow Flight. На него без простоя переехали 30+ пайплайнов.',
       },
     },
   },
@@ -24,12 +24,12 @@ export const highlights: Highlight[] = [
     id: 'spark-batch',
     l10n: {
       en: {
-        title: 'Nightly batch, three times faster',
-        text: 'Rewrote the heaviest Spark SQL marts with partition pruning, broadcast joins and skew hints under AQE. The window went from 5 hours to 1 h 40 min.',
+        title: 'Nightly batch 3× faster',
+        text: 'Partition pruning, broadcast joins and skew hints under AQE on the heaviest Spark SQL marts: 5 h down to 1 h 40 min.',
       },
       ru: {
-        title: 'Ночной батч в три раза быстрее',
-        text: 'Переписал самые тяжёлые витрины на Spark SQL: partition pruning, broadcast join, skew-хинты под AQE. Окно сократилось с 5 часов до 1 ч 40 мин.',
+        title: 'Ночной батч в 3 раза быстрее',
+        text: 'Partition pruning, broadcast join и skew-хинты под AQE на самых тяжёлых витринах Spark SQL: с 5 ч до 1 ч 40 мин.',
       },
     },
   },
@@ -37,12 +37,12 @@ export const highlights: Highlight[] = [
     id: 'reliability',
     l10n: {
       en: {
-        title: 'On-call that gets quieter',
-        text: 'SLOs with burn-rate alerts, one trace from an Airflow task through Spark to a Java call, idempotent Kafka consumers with a dead-letter topic. Median time to resolve dropped under 40 minutes.',
+        title: 'SLOs and on-call',
+        text: 'Burn-rate alerts, tracing from Airflow through Spark to Java, idempotent Kafka consumers. Median time to resolve is under 40 minutes.',
       },
       ru: {
-        title: 'Дежурства, которые становятся тише',
-        text: 'SLO с алертами по burn rate, один трейс от задачи в Airflow через Spark до вызова в Java, идемпотентные консьюмеры Kafka с dead-letter топиком. Медианное время устранения меньше 40 минут.',
+        title: 'SLO и дежурства',
+        text: 'Алерты по burn rate, трейсинг от Airflow через Spark до Java, идемпотентные консьюмеры Kafka. Медианное время устранения меньше 40 минут.',
       },
     },
   },
@@ -50,12 +50,12 @@ export const highlights: Highlight[] = [
     id: 'agents',
     l10n: {
       en: {
-        title: 'Agents that know the platform',
-        text: 'An MCP server over Airflow and DLH metadata plus shared agent skills: the team’s coding agents see lineage and run history, so “why is this table stale” takes minutes instead of an hour of digging.',
+        title: 'MCP server for the platform',
+        text: 'Coding agents get lineage and run history from Airflow and DLH. Finding why a table is stale takes minutes.',
       },
       ru: {
-        title: 'Агенты, которые знают платформу',
-        text: 'MCP-сервер над метаданными Airflow и DLH и общие скиллы для агентов: кодовые агенты команды видят lineage и историю запусков, и вопрос «почему таблица устарела» решается за минуты, а не за час раскопок.',
+        title: 'MCP-сервер для платформы',
+        text: 'Кодовые агенты получают lineage и историю запусков из Airflow и DLH. Причину устаревшей таблицы теперь находят за минуты.',
       },
     },
   },
