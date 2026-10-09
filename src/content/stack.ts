@@ -10,7 +10,7 @@ export const stack: StackGroup[] = [
   {
     id: 'data',
     label: { en: 'Data', ru: 'Данные' },
-    items: ['Spark SQL', 'PySpark', 'Airflow', 'Iceberg', 'Arrow Flight', 'Kafka', 'ClickHouse', 'Trino'],
+    items: ['Spark SQL', 'PySpark', 'Airflow', 'Iceberg', 'Arrow Flight', 'Kafka Streams', 'ClickHouse', 'Trino'],
   },
   {
     id: 'backend',
@@ -22,6 +22,8 @@ export const stack: StackGroup[] = [
       'Scala',
       'Go',
       'FastAPI',
+      'Kafka',
+      'RabbitMQ',
       'gRPC',
       'GraphQL',
       'PostgreSQL',
@@ -43,9 +45,17 @@ export const stack: StackGroup[] = [
       'Terraform',
       'GitLab CI',
       'GitHub Actions',
+      'Helm',
       'OpenTelemetry',
       'Prometheus',
       'Grafana',
+      'Loki, Tempo',
+      'k6',
     ],
+  },
+  {
+    id: 'ai',
+    label: { en: 'AI agents', ru: 'AI-агенты' },
+    items: ['Claude Code', 'MCP servers', 'Agent skills', 'Evals, LLM judge', 'RAG, pgvector', 'OpenRouter'],
   },
 ];

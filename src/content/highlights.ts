@@ -1,12 +1,25 @@
 import type { Localized } from '@/i18n';
 
-/** Current role impact, shown in the "Now" section. Newest first. */
+/** Current role impact, shown in the "Now" section. Strongest first. */
 export interface Highlight {
   id: string;
   l10n: Localized<{ title: string; text: string }>;
 }
 
 export const highlights: Highlight[] = [
+  {
+    id: 'kora-service',
+    l10n: {
+      en: {
+        title: 'A data service from design doc to production',
+        text: 'Load estimate, failure modes and API in a design doc defended at the architecture review, then a Java/Kora service on Kafka, Iceberg and Arrow Flight that 30+ pipelines moved to without downtime.',
+      },
+      ru: {
+        title: 'Сервис данных от design doc до продакшена',
+        text: 'Оценка нагрузки, сценарии отказов и API в design doc, защищённом на архитектурном ревью, а затем сервис на Java/Kora поверх Kafka, Iceberg и Arrow Flight, на который без простоя переехали 30+ пайплайнов.',
+      },
+    },
+  },
   {
     id: 'spark-batch',
     l10n: {
@@ -21,41 +34,28 @@ export const highlights: Highlight[] = [
     },
   },
   {
-    id: 'airflow-library',
+    id: 'reliability',
     l10n: {
       en: {
-        title: 'Airflow that scales with the team',
-        text: 'Moved 60+ DAGs onto a shared operator library with typed configs and built-in data quality checks. Failed runs dropped threefold, a new source lands in a day.',
+        title: 'On-call that gets quieter',
+        text: 'SLOs with burn-rate alerts, one trace from an Airflow task through Spark to a Java call, idempotent Kafka consumers with a dead-letter topic. Median time to resolve dropped under 40 minutes.',
       },
       ru: {
-        title: 'Airflow, который растёт вместе с командой',
-        text: 'Перевёл 60+ DAG на общую библиотеку операторов с типизированными конфигами и встроенными проверками качества. Падений стало втрое меньше, новый источник подключается за день.',
+        title: 'Дежурства, которые становятся тише',
+        text: 'SLO с алертами по burn rate, один трейс от задачи в Airflow через Spark до вызова в Java, идемпотентные консьюмеры Kafka с dead-letter топиком. Медианное время устранения меньше 40 минут.',
       },
     },
   },
   {
-    id: 'kora-service',
+    id: 'agents',
     l10n: {
       en: {
-        title: 'A data service from scratch',
-        text: 'Designed and shipped a Java/Kora service end to end: data model, REST contracts, Kafka and DB queues for async work, Iceberg and Arrow Flight for heavy reads.',
+        title: 'Agents that know the platform',
+        text: 'An MCP server over Airflow and DLH metadata plus shared agent skills: the team’s coding agents see lineage and run history, so “why is this table stale” takes minutes instead of an hour of digging.',
       },
       ru: {
-        title: 'Сервис данных с нуля',
-        text: 'Спроектировал и запустил сервис на Java/Kora целиком: модель данных, REST-контракты, Kafka и очереди в БД для асинхронных задач, Iceberg и Arrow Flight для тяжёлых чтений.',
-      },
-    },
-  },
-  {
-    id: 'tracing',
-    l10n: {
-      en: {
-        title: 'One trace across the stack',
-        text: 'Rolled out OpenTelemetry on every platform service. An incident is followed from an Airflow task through Spark to a Java call in a single Grafana view.',
-      },
-      ru: {
-        title: 'Один трейс через весь стек',
-        text: 'Внедрил OpenTelemetry во все сервисы платформы. Инцидент теперь видно целиком, от задачи в Airflow через Spark до вызова в Java, в одном окне Grafana.',
+        title: 'Агенты, которые знают платформу',
+        text: 'MCP-сервер над метаданными Airflow и DLH и общие скиллы для агентов: кодовые агенты команды видят lineage и историю запусков, и вопрос «почему таблица устарела» решается за минуты, а не за час раскопок.',
       },
     },
   },

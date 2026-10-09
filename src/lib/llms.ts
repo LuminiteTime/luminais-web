@@ -1,4 +1,5 @@
 import { contacts, site } from '@/config/site';
+import { cases } from '@/content/cases';
 import { experience } from '@/content/experience';
 import { highlights } from '@/content/highlights';
 import { projects } from '@/content/projects';
@@ -43,7 +44,7 @@ export function llmsIndex(): string {
     '## Profile',
     '',
     ...locales.map((l) => `- [Profile page, ${localeNames[l]}](${url(localePath(l))})`),
-    `- [Full profile in Markdown](${url('/llms-full.txt')}): current role, experience, projects, stack`,
+    `- [Full profile in Markdown](${url('/llms-full.txt')}): current role, experience, case studies, projects, stack`,
     '',
     '## Contacts',
     '',
@@ -87,7 +88,31 @@ export function llmsFull(): string {
         '',
         `${period(start, end)}. ${e.summary}`,
         '',
-        ...e.points.map((p) => `- ${p}`),
+        ...e.points.map((p) => `- ${t.experience.facets[p.facet]}: ${p.text}`),
+        '',
+      ];
+    }),
+    '## Case studies',
+    '',
+    ...cases.flatMap(({ start, end, stack: tech, l10n }) => {
+      const c = l10n[LOCALE];
+      return [
+        `### ${c.title}`,
+        '',
+        `> ${c.tagline}`,
+        '',
+        `- Role: ${c.role}`,
+        `- Team: ${c.team}`,
+        `- When: ${period(start, end)}`,
+        `- Stack: ${tech.join(', ')}`,
+        '',
+        c.problem,
+        '',
+        c.practice,
+        '',
+        ...c.decisions.map((d) => `- ${d.title}: ${d.text}`),
+        '',
+        ...c.outcomes.map((o) => `- ${o.value}: ${o.label}`),
         '',
       ];
     }),

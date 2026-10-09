@@ -35,7 +35,7 @@ export const services = {
 } as const;
 
 /** Page sections in render order. Ids double as URL anchors and nav keys. */
-export const sections = ['now', 'experience', 'work', 'stack', 'contact'] as const;
+export const sections = ['now', 'experience', 'cases', 'work', 'stack', 'contact'] as const;
 export type SectionId = (typeof sections)[number];
 
 /** Backdrop scene stage shown while each part of the page is on screen (see `stages` in src/scene/config.ts). */
@@ -43,6 +43,7 @@ export const sectionStages: Record<SectionId | 'hero', number> = {
   hero: 0,
   now: 1,
   experience: 2,
+  cases: 3,
   work: 3,
   stack: 3,
   contact: 4,

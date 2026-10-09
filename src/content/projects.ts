@@ -55,12 +55,12 @@ export const projects: Project[] = [
       en: {
         title: 'PingTower',
         context: 'T1 Hackathon, 2025',
-        text: 'Uptime monitoring for sites and APIs with alert rules, incident history and SLA reports. I led the backend: Java core, ClickHouse for time series, a Python notifier behind one OpenAPI contract.',
+        text: 'Uptime monitoring for sites and APIs with alert rules, incident history and SLA reports. I led the backend and designed it for 10,000 checks a minute: a Java scheduler, ClickHouse for time series, a Python notifier behind one OpenAPI contract.',
       },
       ru: {
         title: 'PingTower',
         context: 'T1 Hackathon, 2025',
-        text: 'Мониторинг доступности сайтов и API: правила алертов, история инцидентов, SLA-отчёты. Я вёл бэкенд: ядро на Java, ClickHouse под метрики, нотификатор на Python за общим OpenAPI-контрактом.',
+        text: 'Мониторинг доступности сайтов и API: правила алертов, история инцидентов, SLA-отчёты. Я вёл бэкенд и спроектировал его на 10 000 проверок в минуту: планировщик на Java, ClickHouse под временные ряды, нотификатор на Python за общим OpenAPI-контрактом.',
       },
     },
   },
@@ -89,13 +89,29 @@ export const projects: Project[] = [
     l10n: {
       en: {
         title: 'Open Labs Share',
-        context: 'Team of seven, 2025',
-        text: 'A peer-to-peer learning platform. I designed the gateway, auth and user services and a notebook runtime with a sandboxed Python kernel.',
+        context: 'Backend lead, team of seven, 2025',
+        text: 'A peer-to-peer learning platform. I led the backend part of a seven-person team: split the work across three engineers, ran weekly 1:1s and design reviews, and built the gateway, auth and user services myself.',
       },
       ru: {
         title: 'Open Labs Share',
-        context: 'Команда из семи человек, 2025',
-        text: 'Платформа, где студенты учат друг друга. Я спроектировал gateway, авторизацию, сервис пользователей и рантайм ноутбуков с изолированным Python-ядром.',
+        context: 'Лид бэкенда, команда из семи человек, 2025',
+        text: 'Платформа, где студенты учат друг друга. Я вёл бэкенд в команде из семи человек: делил работу между тремя инженерами, проводил еженедельные 1:1 и дизайн-ревью, сам написал gateway, авторизацию и сервис пользователей.',
+      },
+    },
+  },
+  {
+    id: 'vmeste',
+    stack: ['Java 25', 'Spring Boot 4', 'Kotlin', 'Jetpack Compose', 'PostgreSQL', 'pgvector'],
+    l10n: {
+      en: {
+        title: 'Vmeste',
+        context: 'Family app, 2026',
+        text: 'One app for a family: chat, documents, a shared calendar and an assistant that answers from the family’s own data. A modular monolith on Spring Boot 4, an Android client in Compose, retrieval over pgvector.',
+      },
+      ru: {
+        title: 'Вместе',
+        context: 'Семейное приложение, 2026',
+        text: 'Одно приложение на семью: чат, документы, общий календарь и ассистент, который отвечает по данным самой семьи. Модульный монолит на Spring Boot 4, Android-клиент на Compose, поиск по pgvector.',
       },
     },
   },

@@ -1,6 +1,6 @@
 ---
 import Section from '@/components/ui/Section.astro';
-import { experience } from '@/content/experience';
+import { experience, groupByFacet } from '@/content/experience';
 import { formatPeriod, useTranslations, type Locale } from '@/i18n';
 
 interface Props {
@@ -13,7 +13,7 @@ const t = useTranslations(locale).experience;
 
 <Section id="experience" title={t.title}>
   <ol class="timeline">
-    {experience.map(({ start, end, l10n }, index) => {
+    {experience.map(({ start, end, l10n }) => {
       const entry = l10n[locale];
       const current = !end;
       return (
@@ -28,14 +28,30 @@ const t = useTranslations(locale).experience;
               <span class="role">{entry.role}</span>
             </h3>
             <p class="summary">{entry.summary}</p>
+            {entry.impact.length > 0 && (
+              <ul class="impact">
+                {entry.impact.map((result) => (
+                  <li>{result}</li>
+                ))}
+              </ul>
+            )}
             {entry.points.length > 0 && (
-              <details open={index === 0}>
+              <details>
                 <summary>{t.details}</summary>
-                <ul class="points">
-                  {entry.points.map((point) => (
-                    <li>{point}</li>
+                <dl class="facets">
+                  {groupByFacet(entry.points).map(([facet, texts]) => (
+                    <div class="facet">
+                      <dt>{t.facets[facet]}</dt>
+                      <dd>
+                        <ul class="points">
+                          {texts.map((text) => (
+                            <li>{text}</li>
+                          ))}
+                        </ul>
+                      </dd>
+                    </div>
                   ))}
-                </ul>
+                </dl>
               </details>
             )}
           </div>
@@ -103,8 +119,48 @@ const t = useTranslations(locale).experience;
     margin-top: 6px;
   }
 
+  .impact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .impact li {
+    padding: 4px var(--space-3);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    color: var(--color-accent-strong);
+    background: var(--color-accent-soft);
+  }
+
   details {
     margin-top: var(--space-3);
+  }
+
+  .facets {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+    padding-top: var(--space-3);
+  }
+
+  .facet {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  dt {
+    padding-top: 2px;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    color: var(--color-ink);
+  }
+
+  dd {
+    margin: 0;
   }
 
   summary {
@@ -157,7 +213,6 @@ const t = useTranslations(locale).experience;
     display: grid;
     gap: var(--space-2);
     max-width: 44rem;
-    padding-top: var(--space-2);
   }
 
   .points li {
@@ -178,6 +233,11 @@ const t = useTranslations(locale).experience;
   }
 
   @media (max-width: 720px) {
+    .facet {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+
     .entry {
       grid-template-columns: 1fr;
       gap: var(--space-2);

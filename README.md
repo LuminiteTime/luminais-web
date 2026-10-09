@@ -49,17 +49,17 @@ pnpm dev          # http://localhost:4321
 src/
 ├── config/site.ts          site facts, contacts, section order
 ├── i18n/                   locales, UI strings, date formatting
-├── content/                experience, projects, highlights, stack (data + translations)
+├── content/                experience, cases, projects, highlights, stack (data + translations)
 ├── styles/
 │   ├── tokens.css          design tokens, the single source of truth
 │   └── global.css          reset, base elements, utilities (.glass, .wrap, .sr-only)
 ├── layouts/BaseLayout.astro  <html>, head, fonts, backdrop, smooth scroll
 ├── components/
-│   ├── ui/                 primitives: Button, Heading, Section, ExternalIcon
+│   ├── ui/                 primitives: Button, Heading, Section, ArchitectureDiagram, ExternalIcon
 │   ├── layout/             Seo, SiteNav, SiteFooter, Backdrop
-│   └── sections/           Hero, Now, Experience, Work, Stack, Contact
+│   └── sections/           Hero, Now, Experience, Cases, Work, Stack, Contact
 ├── scene/                  WebGL backdrop: config, layouts, bricks, palette
-├── scripts/                client behaviour: backdrop, hero-name, scroll-spy, copy-text, smooth-scroll
+├── scripts/                client behaviour: backdrop, hero-name, tabs, scroll-spy, copy-text, smooth-scroll, analytics
 ├── lib/                    env helpers, schema.org graph, llms.txt builders
 └── pages/
     ├── [...locale].astro   one route per locale: / and /ru/
@@ -107,7 +107,8 @@ text stays soft (`SHRP 0`). The hero name tweens `wght` and `SHRP` per letter.
 | Task                              | File                                                                                                                      |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | Add a T-Bank achievement          | `src/content/highlights.ts`, and a bullet in `src/content/experience.ts`                                                  |
-| Add a job                         | `src/content/experience.ts` (`start: 'YYYY-MM'`, omit `end` for current)                                                  |
+| Add a job                         | `src/content/experience.ts`: `start: 'YYYY-MM'` (omit `end` for current), `impact` chips, `points` tagged by facet        |
+| Add a case study                  | `src/content/cases.ts`: problem, practice, decisions, outcomes and a diagram (`nodes` on a grid, `edges`)                 |
 | Add a project                     | `src/content/projects.ts` (`featured: true` for a wide tile)                                                              |
 | Change stack                      | `src/content/stack.ts`                                                                                                    |
 | Change interface text             | `src/i18n/ui.ts`                                                                                                          |
